@@ -1,6 +1,12 @@
-import { Text, View } from "react-native";
+import { StatusBar } from "react-native";
 import { useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./Screens/Login";
+import Signup from "./Screens/Signup";
 import SplashScreen from "react-native-splash-screen";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
 
@@ -9,9 +15,26 @@ const App = () => {
     }, [])
 
     return(
-        <View style={{display: 'flex', alignItems: 'center'}}>
-            <Text style={{color: 'black', fontSize: 30}}>Init App</Text>
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{
+                gestureEnabled: false,
+                headerTitleAlign: 'center',
+                headerBackTitleVisible: false,
+            }}>
+                <Stack.Screen
+                    name='התחברות'
+                    component={Login}
+                />
+                <Stack.Screen
+                    name='הרשמה'
+                    component={Signup}
+                />
+            </Stack.Navigator>
+
+            <StatusBar
+                barStyle={'dark-content'}
+                backgroundColor={'white'}/>
+        </NavigationContainer>
     )
 }
 
