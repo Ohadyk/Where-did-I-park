@@ -5,11 +5,16 @@ import PrimaryButton from "../Components/PrimaryButton";
 import appIcon from '../assets/icon.png';
 import GlobalStyles from '../StyleSheet/GlobalStyle';
 import Entypo from "react-native-vector-icons/Entypo";
+import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
 
 const Login = ({navigation}) => {
 
     const signup = () => {
         navigation.navigate('הרשמה')
+    }
+
+    const forgotPassword = () => {
+        navigation.navigate('איפוס סיסמא')
     }
 
     const login = () => {
@@ -20,37 +25,45 @@ const Login = ({navigation}) => {
         <View style={GlobalStyles.screenContainer}>
             <Animated.Image
               source={appIcon}
-              style={GlobalStyles.icon}
+              style={GlobalStyles.appIcon}
               entering={BounceInUp.duration(700).delay(500)}
             />
             <Animated.View
               style={styles.formContainer}
               entering={ZoomInDown.duration(500)}
             >
-                <View style={[styles.inputContainer, styles.shadow]}>
+                <View style={[GlobalStyles.inputContainer, {marginVertical: 20}, GlobalStyles.shadow]}>
                     <TextInput
-                      style={styles.input}
+                      style={GlobalStyles.input}
                       placeholder={'אימייל'}
                     />
-                    <Entypo style={styles.icon} name="mail" size={25}/>
+                    <Entypo style={GlobalStyles.inputIcon} name="mail" size={25}/>
                 </View>
-                <View style={[styles.inputContainer, styles.shadow]}>
+                <View style={[GlobalStyles.inputContainer, {marginBottom: 20}, GlobalStyles.shadow]}>
                     <TextInput
-                      style={styles.input}
+                      style={GlobalStyles.input}
                       placeholder={'סיסמא'}
                     />
-                    <Entypo style={styles.icon} name="lock" size={25}/>
+                    <Entypo style={GlobalStyles.inputIcon} name="key" size={25}/>
                 </View>
-                <View style={styles.row}>
+                <View style={GlobalStyles.row}>
                     <PrimaryButton
                         text={'התחברות'}
-                        colors={[ '#00C2FF', '#0047FF' ]}
+                        width={'95%'}
+                        colors={LINEAR_GRADIENT_BLUE}
                         onClick={login}
                     />
+                </View>
+                <View style={GlobalStyles.row}>
                     <PrimaryButton
                         text={'הרשמה'}
-                        colors={[ '#00FF9E', '#0CFF00' ]}
+                        colors={LINEAR_GRADIENT_GREY}
                         onClick={signup}
+                    />
+                    <PrimaryButton
+                        text={'איפוס סיסמא'}
+                        colors={LINEAR_GRADIENT_GREY}
+                        onClick={forgotPassword}
                     />
                 </View>
             </Animated.View>
@@ -59,48 +72,11 @@ const Login = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    row: {
-        width: '100%',
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-around',
-        alignItems: 'center'
-    },
-
     formContainer: {
+        flex: 1,
         width: '100%',
         alignItems: 'center',
     },
-
-    inputContainer: {
-        margin: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingRight: 20,
-        backgroundColor: 'white',
-        borderColor: '#838383',
-        borderRadius: 10,
-    },
-
-    input: {
-        width: '100%',
-        textAlign: 'right',
-    },
-
-    icon: {
-        color: '#838383',
-        marginLeft: 10
-    },
-
-    shadow: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    }
 })
 
 export default Login;
