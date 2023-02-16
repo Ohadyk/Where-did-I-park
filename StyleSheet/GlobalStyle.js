@@ -46,6 +46,11 @@ const GlobalStyles = StyleSheet.create({
         marginRight: 50
     },
 
+    inputErrorTxt: {
+        marginRight: 10,
+        color: 'red'
+    },
+
     shadow: {
         shadowColor: '#000',
         shadowOffset: {

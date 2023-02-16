@@ -39,7 +39,8 @@ const App = () => {
 
             <StatusBar
                 barStyle={'dark-content'}
-                backgroundColor={'white'}/>
+                backgroundColor={'white'}
+            />
         </NavigationContainer>
     )
 }

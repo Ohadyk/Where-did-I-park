@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import Animated, { BounceInUp, ZoomInDown } from "react-native-reanimated";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -6,8 +6,15 @@ import appIcon from '../assets/icon.png';
 import GlobalStyles from '../StyleSheet/GlobalStyle';
 import Entypo from "react-native-vector-icons/Entypo";
 import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
+import auth from '@react-native-firebase/auth';
 
 const Login = ({navigation}) => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const emailRef = useRef(null)
+    const passwordRef = useRef(null)
 
     const signup = () => {
         navigation.navigate('הרשמה')
@@ -17,9 +24,51 @@ const Login = ({navigation}) => {
         navigation.navigate('איפוס סיסמא')
     }
 
-    const login = () => {
-        console.log('login')
-    }
+    const onLogin = async () => {
+        const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+        if (!email) {
+            emailRef.current.focus()
+            alert('אנא מלא את כל הפרטים')
+        }
+        else if(!emailValidationRegex.test(email)) {
+            emailRef.current.focus()
+            alert('אימייל לא חוקי')
+        }
+        else if(!password) {
+            passwordRef.current.focus()
+            alert('אנא מלא את כל הפרטים')
+        }
+        else if(password.length < 6) {
+            passwordRef.current.focus()
+            alert('סיסמא לא חוקית')
+        }
+        else {
+            await loginHandler()
+        }
+    };
+
+    const loginHandler = async () => {
+        try {
+            await auth().signInWithEmailAndPassword(email, password);
+            alert('התחברת בהצלחה')
+        }
+        catch (error) {
+            console.log(error)
+
+            if (error.code === 'auth/invalid-email') {
+                emailRef.current.focus()
+                alert('אימייל לא חוקי')
+            }
+            else if (error.code === 'auth/invalid-password') {
+                passwordRef.current.focus()
+                alert('סיסמא לא חוקית')
+            }
+            else {
+                alert('שגיאה. אנא נסה שוב מאוחר יותר')
+            }
+        }
+    };
 
     return(
         <View style={GlobalStyles.screenContainer}>
@@ -36,6 +85,11 @@ const Login = ({navigation}) => {
                     <TextInput
                       style={GlobalStyles.input}
                       placeholder={'אימייל'}
+                      value={email}
+                      ref={emailRef}
+                      onChangeText={(value) => {
+                          setEmail(value)
+                      }}
                     />
                     <Entypo style={GlobalStyles.inputIcon} name="mail" size={25}/>
                 </View>
@@ -43,6 +97,13 @@ const Login = ({navigation}) => {
                     <TextInput
                       style={GlobalStyles.input}
                       placeholder={'סיסמא'}
+                      secureTextEntry={true}
+                      value={password}
+                      ref={passwordRef}
+                      maxLength={12}
+                      onChangeText={(value) => {
+                          setPassword(value)
+                      }}
                     />
                     <Entypo style={GlobalStyles.inputIcon} name="key" size={25}/>
                 </View>
@@ -51,7 +112,7 @@ const Login = ({navigation}) => {
                         text={'התחברות'}
                         width={'95%'}
                         colors={LINEAR_GRADIENT_BLUE}
-                        onClick={login}
+                        onClick={onLogin}
                     />
                 </View>
                 <View style={GlobalStyles.row}>
