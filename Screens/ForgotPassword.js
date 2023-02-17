@@ -50,7 +50,7 @@ const ForgotPassword = ({navigation}) => {
         <View style={GlobalStyle.screenContainer}>
             <View style={GlobalStyle.formContainer}>
                 <View style={{width: '100%', marginBottom: 30}}>
-                    <Text style={styles.txt}>אנא הכנס/י את האימייל שבאמצעותו נרשמת על מנת שנשלח לך קישור לאיפוס הסיסמא:</Text>
+                    <Text style={styles.txt}>אנא הכנס/י את האימייל שבאמצעותו נרשמת על מנת שנשלח אליך קישור לאיפוס הסיסמא:</Text>
                 </View>
                 <View style={{ width: '100%', marginBottom: 20 }}>
                     <View style={[GlobalStyle.inputContainer, {marginVertical: 20}, GlobalStyle.shadow]}>
@@ -83,7 +83,7 @@ const ForgotPassword = ({navigation}) => {
 
 const styles = StyleSheet.create({
     txt: {
-        fontSize: 17,
+        fontSize: 16,
         fontWeight: 'bold',
     },
 });

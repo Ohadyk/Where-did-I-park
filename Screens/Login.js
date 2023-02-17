@@ -7,8 +7,12 @@ import GlobalStyles from '../StyleSheet/GlobalStyle';
 import Entypo from "react-native-vector-icons/Entypo";
 import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
 import auth from '@react-native-firebase/auth';
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/authSlice";
 
 const Login = ({navigation}) => {
+
+    const dispatch = useDispatch()
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -50,11 +54,13 @@ const Login = ({navigation}) => {
 
     const loginHandler = async () => {
         try {
-            await auth().signInWithEmailAndPassword(email, password);
-            alert('התחברת בהצלחה')
+            const userCredential = await auth().signInWithEmailAndPassword(email, password);
+            dispatch(authActions.setUid(userCredential.user.uid))
+            setEmail('')
+            setPassword('')
         }
         catch (error) {
-            console.log(error)
+            console.log(error);
 
             if (error.code === 'auth/invalid-email') {
                 emailRef.current.focus()
