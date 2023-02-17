@@ -1,12 +1,12 @@
 import React from "react";
-import { Text, View } from "react-native";
-import GlobalStyle from "../StyleSheet/GlobalStyle";
+import HomeMap from "../Components/HomeMap";
+import { View } from "react-native";
 
 const Home = () => {
 
     return(
-        <View style={GlobalStyle.screenContainer}>
-
+        <View>
+            <HomeMap/>
         </View>
     )
 };
