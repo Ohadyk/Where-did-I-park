@@ -11,6 +11,7 @@ const DrawerContainer = () => {
     return(
         <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}
             screenOptions={{
+                headerShown: false,
                 swipeEnabled: false,
                 gestureEnabled: false,
                 headerTitleAlign: 'center',

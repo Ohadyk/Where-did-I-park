@@ -12,22 +12,25 @@ import { authActions } from "../store/authSlice";
 
 const Login = ({navigation}) => {
 
-    const dispatch = useDispatch()
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
 
+    const dispatch = useDispatch()
+
+    // navigate the user to sign up screen
     const signup = () => {
         navigation.navigate('הרשמה')
     }
 
+    // navigate the user to forgot password screen
     const forgotPassword = () => {
         navigation.navigate('איפוס סיסמא')
     }
 
+    // validate the user inputs when click on login button
     const onLogin = async () => {
         const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -52,10 +55,11 @@ const Login = ({navigation}) => {
         }
     };
 
+    // logging the user if the inputs are valid
     const loginHandler = async () => {
         try {
             const userCredential = await auth().signInWithEmailAndPassword(email, password);
-            dispatch(authActions.setUid(userCredential.user.uid))
+            dispatch(authActions.setUid(userCredential.user.uid));
             setEmail('')
             setPassword('')
         }

@@ -15,6 +15,7 @@ const ForgotPassword = ({navigation}) => {
 
     const emailRef = useRef(null)
 
+    // validate the user input when click on reset password button
     const onResetPassword = async () => {
         const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -34,6 +35,7 @@ const ForgotPassword = ({navigation}) => {
         }
     }
 
+    // reset the user password if the inputs are valid
     const resetPasswordHandler = async () => {
         try {
             await auth().sendPasswordResetEmail(email);
