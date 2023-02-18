@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableHighlight, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import GlobalStyles from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -11,7 +11,7 @@ const DrawerButton = () => {
     return (
         <TouchableOpacity style={[styles.menuButton, GlobalStyles.shadow]} underlayColor='white' activeOpacity={0.7} onPress={() => navigation.openDrawer()}>
             <View>
-                <Entypo name="menu" size={35}/>
+                <Entypo name='menu' size={35}/>
             </View>
         </TouchableOpacity>
     )
