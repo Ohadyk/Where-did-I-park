@@ -4,6 +4,8 @@ import { View } from "react-native";
 import DrawerButton from "../Buttons/DrawerButton";
 import IParkedButton from "../Buttons/IParkedButton";
 import { useSelector } from "react-redux";
+import LearningStateHeader from "../Components/LearningStateHeader";
+import StableStateHeader from "../Components/StableStateHeader";
 
 const Home = () => {
 
@@ -14,6 +16,8 @@ const Home = () => {
             <HomeMap/>
             <DrawerButton/>
             {appState === 'learning' ? <IParkedButton /> : null}
+            {appState === 'learning' ? <LearningStateHeader /> : null}
+            {appState === 'stable' ? <StableStateHeader /> : null}
         </View>
     )
 };

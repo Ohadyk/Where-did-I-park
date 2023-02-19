@@ -33,6 +33,9 @@ const App = () => {
                     if(userData.appState === 'stable') {    // run the algorithm to detect parkings
 
                     }
+                    else {  // update user data depends on parking alerts from user
+
+                    }
                 }
                 else {  // init new user doc
                     await updateUserData(initialUserData);
@@ -43,9 +46,8 @@ const App = () => {
             else {
                 setIsLoggedIn(false);
             }
+            SplashScreen.hide();
         });
-
-        SplashScreen.hide();
 
         return () => {
             unsubscribe();

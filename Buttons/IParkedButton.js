@@ -4,7 +4,7 @@ import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";
 import { LINEAR_GRADIENT_BLUE } from "../StyleSheet/GlobalColors";
-import Animated, { SlideInDown } from "react-native-reanimated";
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 const IParkedButton = () => {
 
@@ -16,6 +16,7 @@ const IParkedButton = () => {
         <Animated.View
             style={styles.parkedContainer}
             entering={SlideInDown.duration(700).delay(1000)}
+            exiting={SlideOutDown.duration(500).delay(0)}
         >
             <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={IParked}>
                 <LinearGradient
@@ -34,9 +35,9 @@ const IParkedButton = () => {
 const styles = StyleSheet.create({
     parkedContainer: {
         position: 'absolute',
+        alignSelf: 'center',
         width: '35%',
         bottom: 0,
-        alignSelf: 'center',
     },
 
     parkedButton: {
