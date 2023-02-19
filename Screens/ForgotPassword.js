@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -49,37 +49,41 @@ const ForgotPassword = ({navigation}) => {
     }
 
     return(
-        <View style={GlobalStyle.screenContainer}>
-            <View style={GlobalStyle.formContainer}>
-                <View style={{width: '100%', marginBottom: 30}}>
-                    <Text style={styles.txt}>אנא הכנס/י את האימייל שבאמצעותו נרשמת על מנת שנשלח אליך קישור לאיפוס הסיסמא:</Text>
-                </View>
-                <View style={{ width: '100%', marginBottom: 20 }}>
-                    <View style={[GlobalStyle.inputContainer, {marginVertical: 20}, GlobalStyle.shadow]}>
-                        <TextInput
-                            style={GlobalStyle.input}
-                            placeholder={'אימייל'}
-                            value={email}
-                            ref={emailRef}
-                            onChangeText={(value) => {
-                                setEmail(value);
-                            }}
-                        />
-                        <Entypo style={GlobalStyle.inputIcon} name='mail' size={25} />
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                <View style={GlobalStyle.screenContainer}>
+                    <View style={GlobalStyle.formContainer}>
+                        <View style={{width: '100%', marginBottom: 30}}>
+                            <Text style={styles.txt}>אנא הכנס/י את האימייל שבאמצעותו נרשמת על מנת שנשלח אליך קישור לאיפוס הסיסמא:</Text>
+                        </View>
+                        <View style={{ width: '100%', marginBottom: 20 }}>
+                            <View style={[GlobalStyle.inputContainer, {marginVertical: 20}, GlobalStyle.shadow]}>
+                                <TextInput
+                                    style={GlobalStyle.input}
+                                    placeholder={'אימייל'}
+                                    value={email}
+                                    ref={emailRef}
+                                    onChangeText={(value) => {
+                                        setEmail(value);
+                                    }}
+                                />
+                                <Entypo style={GlobalStyle.inputIcon} name='mail' size={25} />
+                            </View>
+                            {emailValidError ? <Text style={GlobalStyle.inputErrorTxt}>{emailValidError}</Text> : null}
+                        </View>
+                        {serverError ? <Text style={GlobalStyles.inputErrorTxt}>שגיאה. אנא נסה שוב מאוחר יותר</Text> : null}
+                        <View style={GlobalStyle.row}>
+                            <PrimaryButton
+                                text={'שלח קישור לאיפוס'}
+                                width={'95%'}
+                                colors={LINEAR_GRADIENT_BLUE}
+                                onClick={onResetPassword}
+                            />
+                        </View>
                     </View>
-                    {emailValidError ? <Text style={GlobalStyle.inputErrorTxt}>{emailValidError}</Text> : null}
                 </View>
-                {serverError ? <Text style={GlobalStyles.inputErrorTxt}>שגיאה. אנא נסה שוב מאוחר יותר</Text> : null}
-                <View style={GlobalStyle.row}>
-                    <PrimaryButton
-                        text={'שלח קישור לאיפוס'}
-                        width={'95%'}
-                        colors={LINEAR_GRADIENT_BLUE}
-                        onClick={onResetPassword}
-                    />
-                </View>
-            </View>
-        </View>
+            </ScrollView>
+        </TouchableWithoutFeedback>
     )
 }
 

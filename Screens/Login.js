@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, TouchableWithoutFeedback, View, Keyboard, ScrollView } from "react-native";
 import Animated, { BounceInUp, ZoomInDown } from "react-native-reanimated";
 import PrimaryButton from "../Components/PrimaryButton";
 import appIcon from '../assets/icon.png';
@@ -36,7 +36,7 @@ const Login = ({navigation}) => {
 
         if (!email) {
             emailRef.current.focus()
-            alert('אנא מלא את כל הפרטים')
+            alert('אנא מלא/י את כל הפרטים')
         }
         else if(!emailValidationRegex.test(email)) {
             emailRef.current.focus()
@@ -44,7 +44,7 @@ const Login = ({navigation}) => {
         }
         else if(!password) {
             passwordRef.current.focus()
-            alert('אנא מלא את כל הפרטים')
+            alert('אנא מלא/י את כל הפרטים')
         }
         else if(password.length < 6) {
             passwordRef.current.focus()
@@ -75,70 +75,74 @@ const Login = ({navigation}) => {
                 alert('סיסמא לא חוקית')
             }
             else {
-                alert('שגיאה. אנא נסה שוב מאוחר יותר')
+                alert('שגיאה. אנא נסה/י שוב מאוחר יותר')
             }
         }
     };
 
     return(
-        <View style={GlobalStyles.screenContainer}>
-            <Animated.Image
-              source={appIcon}
-              style={GlobalStyles.appIcon}
-              entering={BounceInUp.duration(700).delay(500)}
-            />
-            <Animated.View
-              style={styles.formContainer}
-              entering={ZoomInDown.duration(500)}
-            >
-                <View style={[GlobalStyles.inputContainer, {marginVertical: 20}, GlobalStyles.shadow]}>
-                    <TextInput
-                      style={GlobalStyles.input}
-                      placeholder={'אימייל'}
-                      value={email}
-                      ref={emailRef}
-                      onChangeText={(value) => {
-                          setEmail(value)
-                      }}
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                <View style={GlobalStyles.screenContainer}>
+                    <Animated.Image
+                        source={appIcon}
+                        style={GlobalStyles.appIcon}
+                        entering={BounceInUp.duration(700).delay(500)}
                     />
-                    <Entypo style={GlobalStyles.inputIcon} name="mail" size={25}/>
+                    <Animated.View
+                        style={styles.formContainer}
+                        entering={ZoomInDown.duration(500)}
+                    >
+                        <View style={[GlobalStyles.inputContainer, {marginVertical: 20}, GlobalStyles.shadow]}>
+                            <TextInput
+                                style={GlobalStyles.input}
+                                placeholder={'אימייל'}
+                                value={email}
+                                ref={emailRef}
+                                onChangeText={(value) => {
+                                    setEmail(value)
+                                }}
+                            />
+                            <Entypo style={GlobalStyles.inputIcon} name="mail" size={25}/>
+                        </View>
+                        <View style={[GlobalStyles.inputContainer, {marginBottom: 20}, GlobalStyles.shadow]}>
+                            <TextInput
+                                style={GlobalStyles.input}
+                                placeholder={'סיסמא'}
+                                secureTextEntry={true}
+                                value={password}
+                                ref={passwordRef}
+                                maxLength={12}
+                                onChangeText={(value) => {
+                                    setPassword(value)
+                                }}
+                            />
+                            <Entypo style={GlobalStyles.inputIcon} name="key" size={25}/>
+                        </View>
+                        <View style={GlobalStyles.row}>
+                            <PrimaryButton
+                                text={'התחברות'}
+                                width={'95%'}
+                                colors={LINEAR_GRADIENT_BLUE}
+                                onClick={onLogin}
+                            />
+                        </View>
+                        <View style={GlobalStyles.row}>
+                            <PrimaryButton
+                                text={'הרשמה'}
+                                colors={LINEAR_GRADIENT_GREY}
+                                onClick={signup}
+                            />
+                            <PrimaryButton
+                                text={'איפוס סיסמא'}
+                                colors={LINEAR_GRADIENT_GREY}
+                                onClick={forgotPassword}
+                            />
+                        </View>
+                    </Animated.View>
                 </View>
-                <View style={[GlobalStyles.inputContainer, {marginBottom: 20}, GlobalStyles.shadow]}>
-                    <TextInput
-                      style={GlobalStyles.input}
-                      placeholder={'סיסמא'}
-                      secureTextEntry={true}
-                      value={password}
-                      ref={passwordRef}
-                      maxLength={12}
-                      onChangeText={(value) => {
-                          setPassword(value)
-                      }}
-                    />
-                    <Entypo style={GlobalStyles.inputIcon} name="key" size={25}/>
-                </View>
-                <View style={GlobalStyles.row}>
-                    <PrimaryButton
-                        text={'התחברות'}
-                        width={'95%'}
-                        colors={LINEAR_GRADIENT_BLUE}
-                        onClick={onLogin}
-                    />
-                </View>
-                <View style={GlobalStyles.row}>
-                    <PrimaryButton
-                        text={'הרשמה'}
-                        colors={LINEAR_GRADIENT_GREY}
-                        onClick={signup}
-                    />
-                    <PrimaryButton
-                        text={'איפוס סיסמא'}
-                        colors={LINEAR_GRADIENT_GREY}
-                        onClick={forgotPassword}
-                    />
-                </View>
-            </Animated.View>
-        </View>
+            </ScrollView>
+        </TouchableWithoutFeedback>
     )
 }
 
