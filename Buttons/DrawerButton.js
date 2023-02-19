@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import GlobalStyles from "../StyleSheet/GlobalStyle";
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DrawerButton;
+export default memo(DrawerButton);

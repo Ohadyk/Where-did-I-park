@@ -5,8 +5,8 @@ const dataSlice = createSlice({
     initialState: {
         userData: {
             appState: 'learning',
-            connectToCharger: false,
-            connectToBluetooth: false
+            userConnectingToCharger: false,
+            userConnectingToBluetooth: false
         },
     },
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import MapView from "react-native-maps";
 import Geolocation from "@react-native-community/geolocation";
 import LocationButton from "../Buttons/LocationButton";
@@ -58,4 +58,4 @@ const HomeMap = () => {
     );
 };
 
-export default HomeMap;
+export default memo(HomeMap);

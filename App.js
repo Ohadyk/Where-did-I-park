@@ -10,8 +10,9 @@ import DrawerContainer from "./Components/DrawerContainer";
 import SplashScreen from "react-native-splash-screen";
 import auth from "@react-native-firebase/auth";
 import getUserData from "./GlobalFunctions/getUserData";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "./store/dataSlice";
+import updateUserData from "./GlobalFunctions/updateUserData";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,11 +21,11 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const dispatch = useDispatch();
+    const initialUserData = useSelector(state => state.data.userData);
 
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
             if (user) {
-                setIsLoggedIn(true);
                 const userData = await getUserData();
                 if (userData !== null) {
                     dispatch(dataActions.setUserData(userData));    // init user data in redux
@@ -33,6 +34,11 @@ const App = () => {
 
                     }
                 }
+                else {  // init new user doc
+                    await updateUserData(initialUserData);
+                }
+
+                setIsLoggedIn(true);
             }
             else {
                 setIsLoggedIn(false);
