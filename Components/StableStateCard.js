@@ -3,7 +3,7 @@ import { StyleSheet, Text } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
 
-const StableStateHeader = () => {
+const StableStateCard = () => {
 
     return(
         <Animated.View
@@ -11,7 +11,6 @@ const StableStateHeader = () => {
             entering={SlideInRight.duration(700).delay(500)}
             exiting={SlideOutRight.duration(500).delay(0)}
         >
-            <Text style={styles.headerTxt}>מצב יציב</Text>
             <Text style={styles.bodyTxt}>השאר את האפליקציה פתוחה כדי שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקום החניה</Text>
         </Animated.View>
     )
@@ -23,6 +22,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '75%',
         backgroundColor: 'white',
+        marginTop: 5,
         top: 0,
         right: 0,
         borderTopLeftRadius: 10,
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default StableStateHeader;
+export default StableStateCard;

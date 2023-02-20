@@ -13,6 +13,7 @@ import getUserData from "./GlobalFunctions/getUserData";
 import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "./store/dataSlice";
 import updateUserData from "./GlobalFunctions/updateUserData";
+import { usePowerState } from 'react-native-device-info';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,25 +24,28 @@ const App = () => {
     const dispatch = useDispatch();
     const initialUserData = useSelector(state => state.data.userData);
 
+    const powerState = usePowerState();
+
+    console.log('powerState = ', powerState)
+
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
             if (user) {
                 const userData = await getUserData();
                 if (userData !== null) {
-                    dispatch(dataActions.setUserData(userData));    // init user data in redux
-
-                    if(userData.appState === 'stable') {    // run the algorithm to detect parkings
-
-                    }
-                    else {  // update user data depends on parking alerts from user
-
-                    }
+                    dispatch(dataActions.setLearnedUserData(userData));    // init user data in redux
                 }
                 else {  // init new user doc
                     await updateUserData(initialUserData);
                 }
-
                 setIsLoggedIn(true);
+
+                if(userData.appState === 'stable') {    // run the algorithm to detect parkings
+
+                }
+                else {  // update user data depends on parking alerts from user
+
+                }
             }
             else {
                 setIsLoggedIn(false);

@@ -3,7 +3,7 @@ import { StyleSheet, Text } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
 
-const LearningStateHeader = () => {
+const LearningStateCard = () => {
 
     return(
         <Animated.View
@@ -11,8 +11,7 @@ const LearningStateHeader = () => {
             entering={SlideInRight.duration(700).delay(1000)}
             exiting={SlideOutRight.duration(500).delay(0)}
         >
-            <Text style={styles.headerTxt}>מצב למידה</Text>
-            <Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שנוכל בהמשך לזהות חניות באופן אוטומטי ושלמור עבורך את מיקום החניה</Text>
+            <Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שנוכל בהמשך לזהות חניות באופן אוטומטי ושלמור עבורך את מיקומם</Text>
         </Animated.View>
     )
 };
@@ -23,6 +22,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '75%',
         backgroundColor: 'white',
+        marginTop: 5,
         top: 0,
         right: 0,
         borderTopLeftRadius: 10,
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LearningStateHeader;
+export default LearningStateCard;

@@ -1,23 +1,29 @@
 import React, { memo } from "react";
 import HomeMap from "../Components/HomeMap";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import DrawerButton from "../Buttons/DrawerButton";
 import IParkedButton from "../Buttons/IParkedButton";
 import { useSelector } from "react-redux";
-import LearningStateHeader from "../Components/LearningStateHeader";
-import StableStateHeader from "../Components/StableStateHeader";
+import LearningStateCard from "../Components/LearningStateCard";
+import StableStateCard from "../Components/StableStateCard";
+import HomeHeader from "../Components/HomeHeader";
 
 const Home = () => {
 
     const appState = useSelector(state => state.data.userData.appState);
 
+    const headerTitle = appState === 'learning' ? 'מצב למידה' : 'מצב יציב';
+
     return(
-        <View>
-            <HomeMap/>
-            <DrawerButton/>
-            {appState === 'learning' ? <IParkedButton /> : null}
-            {appState === 'learning' ? <LearningStateHeader /> : null}
-            {appState === 'stable' ? <StableStateHeader /> : null}
+        <View style={{flex: 1}}>
+            <HomeHeader title={headerTitle}/>
+            <View style={{flex: 1}}>
+                <HomeMap/>
+                <DrawerButton/>
+                {appState === 'learning' ? <IParkedButton/> : null}
+                {appState === 'learning' ? <LearningStateCard/> : null}
+                {appState === 'stable' ? <StableStateCard/> : null}
+            </View>
         </View>
     )
 };
