@@ -3,10 +3,13 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";
-import { LINEAR_GRADIENT_BLUE } from "../StyleSheet/GlobalColors";
+import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
 const IParkedButton = () => {
+
+    const isOnRide = useSelector(state => state.data.isOnRide);
 
     const IParked = () => {
         console.log('I parked')
@@ -18,11 +21,11 @@ const IParkedButton = () => {
             entering={SlideInDown.duration(700).delay(1000)}
             exiting={SlideOutDown.duration(500).delay(0)}
         >
-            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={IParked}>
+            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={IParked} disabled={isOnRide}>
                 <LinearGradient
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    colors={LINEAR_GRADIENT_BLUE}
+                    colors={isOnRide ? LINEAR_GRADIENT_GREY : LINEAR_GRADIENT_BLUE}
                     style={[styles.parkedButton, GlobalStyle.shadow]}
                 >
                     <Icon type='material-community-icons' name='car-brake-parking' style={styles.icon} />

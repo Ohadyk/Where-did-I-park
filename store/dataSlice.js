@@ -3,44 +3,57 @@ import { createSlice } from '@reduxjs/toolkit';
 const dataSlice = createSlice({
     name: 'data',
     initialState: {
-        LearnedUserData: {
-            appState: 'learning',
-            userConnectingToCharger: false,
-            userConnectingToBluetooth: false
-        },
-        isOnRide: false,
-        currentSpeed: 0,
+        appState: 'learning',
+        userConnectingToCharger: false,
+        userConnectingToBluetooth: false,
+        numOfLearnedRides: 0,
         currentLocation: {
-            latitude: 0,
-            longitude: 0
+            latitude: 31.768319,
+            longitude: 35.21371,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
         },
-        isCharging: false,
-        isUsingBluetooth: false,
+        currentSpeed: 0,
+        isOnRide: false,
+        isCurrentlyCharging: false,
+        isCurrentlyUsingBluetooth: false,
     },
 
     reducers: {
-        setLearnedUserData(state, action) {
-            state.userData = action.payload
+        setAppState(state, action) {
+            state.appState = action.payload
         },
 
-        setIsOnRide(state, action) {
-            state.isOnRide = action.payload
+        setUserConnectingToCharger(state, action) {
+            state.userConnectingToCharger = action.payload
         },
 
-        setCurrentSpeed(state, action) {
-            state.currentSpeed = action.payload
+        setUserConnectingToBluetooth(state, action) {
+            state.userConnectingToBluetooth = action.payload
+        },
+
+        setNumOfLearnedRides(state, action) {
+            state.numOfLearnedRides = action.payload
         },
 
         setCurrentLocation(state, action) {
             state.currentLocation = action.payload
         },
 
-        setIsCharging(state, action) {
-            state.isCharging = action.payload
+        setCurrentSpeed(state, action) {
+            state.currentSpeed = action.payload
         },
 
-        setIsUsingBluetooth(state, action) {
-            state.isUsingBluetooth = action.payload
+        setIsOnRide(state, action) {
+            state.isOnRide = action.payload
+        },
+
+        setIsCurrentlyCharging(state, action) {
+            state.isCurrentlyCharging = action.payload
+        },
+
+        setIsCurrentlyUsingBluetooth(state, action) {
+            state.isCurrentlyUsingBluetooth = action.payload
         }
     }
 });

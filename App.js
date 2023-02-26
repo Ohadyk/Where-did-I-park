@@ -13,7 +13,9 @@ import getUserData from "./GlobalFunctions/getUserData";
 import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "./store/dataSlice";
 import updateUserData from "./GlobalFunctions/updateUserData";
-import { usePowerState } from 'react-native-device-info';
+import BackgroundService from "react-native-background-actions";
+import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
+import { taskOptions } from "./BackgroundTasks/TasksConfig";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,39 +23,55 @@ const App = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const appState = useSelector(state => state.data.appState);
+    const userConnectingToCharger = useSelector(state => state.data.userConnectingToCharger);
+    const userConnectingToBluetooth = useSelector(state => state.data.userConnectingToBluetooth);
+
     const dispatch = useDispatch();
-    const initialUserData = useSelector(state => state.data.userData);
-
-    const powerState = usePowerState();
-
-    console.log('powerState = ', powerState)
 
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
+
+            // user logged in
             if (user) {
                 const userData = await getUserData();
+
+                // init user data in redux
                 if (userData !== null) {
-                    dispatch(dataActions.setLearnedUserData(userData));    // init user data in redux
+                    dispatch(dataActions.setAppState(userData.appState));
+                    dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
+                    dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
                 }
-                else {  // init new user doc
+                // init new user doc in database
+                else {
+                    const initialUserData = {
+                        appState,
+                        userConnectingToCharger,
+                        userConnectingToBluetooth
+                    }
                     await updateUserData(initialUserData);
                 }
                 setIsLoggedIn(true);
 
+                BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+
                 if(userData.appState === 'stable') {    // run the algorithm to detect parkings
 
                 }
-                else {  // update user data depends on parking alerts from user
+                else {  // learn user behavior - update user data depends on parking alerts from user
 
                 }
             }
+            // user didn't logged in
             else {
                 setIsLoggedIn(false);
+                BackgroundService.stop().then(r => {});
             }
             SplashScreen.hide();
         });
 
         return () => {
+            BackgroundService.stop().then(r => {});
             unsubscribe();
         };
     }, []);
