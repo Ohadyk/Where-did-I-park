@@ -10,8 +10,8 @@ const dataSlice = createSlice({
         currentLocation: {
             latitude: 31.768319,
             longitude: 35.21371,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
         },
         currentSpeed: 0,
         isOnRide: false,
@@ -20,6 +20,15 @@ const dataSlice = createSlice({
     },
 
     reducers: {
+        toggleAppState(state, action) {
+            if(state.appState === 'learning') {
+                state.appState = 'stable';
+            }
+            else {
+                state.appState = 'learning';
+            }
+        },
+
         setAppState(state, action) {
             state.appState = action.payload
         },
@@ -32,8 +41,9 @@ const dataSlice = createSlice({
             state.userConnectingToBluetooth = action.payload
         },
 
-        setNumOfLearnedRides(state, action) {
-            state.numOfLearnedRides = action.payload
+        incNumOfLearnedRides(state, action) {
+            state.numOfLearnedRides = state.numOfLearnedRides + 1;
+            console.log('numOfLearnedRides = ', state.numOfLearnedRides);
         },
 
         setCurrentLocation(state, action) {

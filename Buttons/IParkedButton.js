@@ -5,15 +5,19 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";
 import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { dataActions } from "../store/dataSlice";
 
 const IParkedButton = () => {
 
     const isOnRide = useSelector(state => state.data.isOnRide);
 
+    const dispatch = useDispatch();
+
     const IParked = () => {
         console.log('I parked')
-    }
+        dispatch(dataActions.toggleAppState());
+    };
 
     return (
         <Animated.View

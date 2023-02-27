@@ -27,8 +27,6 @@ const Home = () => {
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
-
-            console.log('interval data = ', persistData);
         }
     };
 

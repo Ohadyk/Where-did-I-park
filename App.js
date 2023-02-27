@@ -29,7 +29,28 @@ const App = () => {
 
     const dispatch = useDispatch();
 
+    // activates and stops the parking detection algorithm according to the state of the application
     useEffect(() => {
+        // run the algorithm to detect parking
+        if(appState === 'stable') {
+            BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+            console.log('parking detection start');
+        }
+        // learn user behavior - update user data depends on parking alerts from user
+        else {
+            BackgroundService.stop().then(r => {});
+            console.log('parking detection stop');
+        }
+
+        return () => {
+            BackgroundService.stop().then(r => {});
+            console.log('parking detection stop');
+        }
+    }, [appState]);
+
+    // init the user data from database and show screens depending on whether the user is logged in or not
+    useEffect(() => {
+        console.log('in app useEffect');
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
 
             // user logged in
@@ -52,26 +73,15 @@ const App = () => {
                     await updateUserData(initialUserData);
                 }
                 setIsLoggedIn(true);
-
-                BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-
-                if(userData.appState === 'stable') {    // run the algorithm to detect parkings
-
-                }
-                else {  // learn user behavior - update user data depends on parking alerts from user
-
-                }
             }
             // user didn't logged in
             else {
                 setIsLoggedIn(false);
-                BackgroundService.stop().then(r => {});
             }
             SplashScreen.hide();
         });
 
         return () => {
-            BackgroundService.stop().then(r => {});
             unsubscribe();
         };
     }, []);
