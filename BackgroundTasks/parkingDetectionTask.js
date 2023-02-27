@@ -1,6 +1,7 @@
 import BackgroundService from "react-native-background-actions";
 import Geolocation from "@react-native-community/geolocation";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PermissionsAndroid } from "react-native";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -32,6 +33,14 @@ export const parkingDetectionTask = async (taskDataArguments) => {
     const { delay } = taskDataArguments;
 
     await new Promise( async (resolve) => {
+
+        const userPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+
+        if(userPermissions === 'denied') {
+            console.log('permissions denied');
+            return;
+        }
+        console.log('after return');
 
         for (let i = 0; BackgroundService.isRunning(); i++) {
             Geolocation.getCurrentPosition(

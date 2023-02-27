@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "react-native";
-import { useEffect, useState } from "react";
+import { AppState, StatusBar } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Screens/Login";
@@ -16,6 +16,7 @@ import updateUserData from "./GlobalFunctions/updateUserData";
 import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
+import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,11 +24,36 @@ const App = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const updateReduxIntervalRef = useRef(null);
+
     const appState = useSelector(state => state.data.appState);
     const userConnectingToCharger = useSelector(state => state.data.userConnectingToCharger);
     const userConnectingToBluetooth = useSelector(state => state.data.userConnectingToBluetooth);
 
     const dispatch = useDispatch();
+
+    const updateReduxData = async () => {
+        const persistData = await readDataFromStorage();
+
+        if(persistData !== null) {
+            dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
+            dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
+            dispatch(dataActions.setIsOnRide(persistData.isOnRide));
+        }
+    };
+
+    // handle changes in running mode of the app:
+    // create interval that updates the redux data with the data from async storage (parking detection task)
+    const handleRunningModeChange = async (state) => {
+        if (state === 'active') {
+            updateReduxIntervalRef.current = setInterval(updateReduxData, 5000);
+            console.log('interval start');
+        }
+        else if (state === 'background') {
+            clearInterval(updateReduxIntervalRef.current);
+            console.log('interval stop');
+        }
+    };
 
     // activates and stops the parking detection algorithm according to the state of the application
     useEffect(() => {
@@ -50,7 +76,8 @@ const App = () => {
 
     // init the user data from database and show screens depending on whether the user is logged in or not
     useEffect(() => {
-        console.log('in app useEffect');
+        const runningModeListener = AppState.addEventListener('change', handleRunningModeChange);
+
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
 
             // user logged in
@@ -83,6 +110,8 @@ const App = () => {
 
         return () => {
             unsubscribe();
+            runningModeListener.remove('change', handleRunningModeChange);
+            clearInterval(updateReduxIntervalRef.current);
         };
     }, []);
 

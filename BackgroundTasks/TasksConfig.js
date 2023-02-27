@@ -1,6 +1,6 @@
 export const taskOptions = {
     taskName: 'parkingDetection',
-    taskTitle: 'WhereDidIPark',
+    taskTitle: 'Parking Detection',
     taskDesc: 'Detecting where you park',
     taskIcon: {
         name: 'ic_launcher',

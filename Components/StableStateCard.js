@@ -11,7 +11,7 @@ const StableStateCard = () => {
             entering={SlideInRight.duration(700).delay(500)}
             exiting={SlideOutRight.duration(500).delay(0)}
         >
-            <Text style={styles.bodyTxt}>השאר את האפליקציה פתוחה כדי שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקום החניה</Text>
+            <Text style={styles.bodyTxt}>השאר את האפליקציה פתוחה כדי שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקומם</Text>
         </Animated.View>
     )
 };

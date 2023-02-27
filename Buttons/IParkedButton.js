@@ -14,7 +14,7 @@ const IParkedButton = () => {
 
     const dispatch = useDispatch();
 
-    const IParked = () => {
+    const parkedHandler = () => {
         console.log('I parked')
         dispatch(dataActions.toggleAppState());
     };
@@ -25,7 +25,7 @@ const IParkedButton = () => {
             entering={SlideInDown.duration(700).delay(1000)}
             exiting={SlideOutDown.duration(500).delay(0)}
         >
-            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={IParked} disabled={isOnRide}>
+            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={parkedHandler} disabled={isOnRide}>
                 <LinearGradient
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
