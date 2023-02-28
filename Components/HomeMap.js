@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import MapView from "react-native-maps";
 import LocationButton from "../Buttons/LocationButton";
 import { useSelector } from "react-redux";

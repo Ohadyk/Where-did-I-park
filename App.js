@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { AppState, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -17,6 +17,7 @@ import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
+import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,20 @@ const App = () => {
 
     const dispatch = useDispatch();
 
+    const initialPersistData = {
+        currentLocation: {
+            latitude: 31.768319,
+            longitude: 35.21371,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+        },
+        currentSpeed: 0,
+        isOnRide: false,
+        isCurrentlyCharging: false,
+        isCurrentlyUsingBluetooth: false,
+        batteryState: 'unplugged'
+    }
+
     const updateReduxData = async () => {
         const persistData = await readDataFromStorage();
 
@@ -39,19 +54,7 @@ const App = () => {
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
-        }
-    };
-
-    // handle changes in running mode of the app:
-    // create interval that updates the redux data with the data from async storage (parking detection task)
-    const handleRunningModeChange = async (state) => {
-        if (state === 'active') {
-            updateReduxIntervalRef.current = setInterval(updateReduxData, 5000);
-            console.log('interval start');
-        }
-        else if (state === 'background') {
-            clearInterval(updateReduxIntervalRef.current);
-            console.log('interval stop');
+            dispatch(dataActions.setBatteryState(persistData.batteryState));
         }
     };
 
@@ -76,8 +79,6 @@ const App = () => {
 
     // init the user data from database and show screens depending on whether the user is logged in or not
     useEffect(() => {
-        const runningModeListener = AppState.addEventListener('change', handleRunningModeChange);
-
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
 
             // user logged in
@@ -90,7 +91,7 @@ const App = () => {
                     dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
                     dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
                 }
-                // init new user doc in database
+                // init new user doc in database and data in async storage
                 else {
                     const initialUserData = {
                         appState,
@@ -98,20 +99,28 @@ const App = () => {
                         userConnectingToBluetooth
                     }
                     await updateUserData(initialUserData);
+                    await writeDataToStorage(initialPersistData);
                 }
                 setIsLoggedIn(true);
+
+                if(!updateReduxIntervalRef.current) {
+                    updateReduxIntervalRef.current = setInterval(updateReduxData, 5000);
+                    console.log('interval start');
+                }
             }
             // user didn't logged in
             else {
                 setIsLoggedIn(false);
+                clearInterval(updateReduxIntervalRef.current);
+                console.log('interval stop');
             }
             SplashScreen.hide();
         });
 
         return () => {
             unsubscribe();
-            runningModeListener.remove('change', handleRunningModeChange);
             clearInterval(updateReduxIntervalRef.current);
+            console.log('interval stop');
         };
     }, []);
 

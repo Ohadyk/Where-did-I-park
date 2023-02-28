@@ -2,6 +2,7 @@ import BackgroundService from "react-native-background-actions";
 import Geolocation from "@react-native-community/geolocation";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PermissionsAndroid } from "react-native";
+import DeviceInfo from "react-native-device-info";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -15,8 +16,15 @@ const data = {
     currentSpeed: 0,
     isOnRide: false,
     isCurrentlyCharging: false,
-    isCurrentlyUsingBluetooth: false
+    isCurrentlyUsingBluetooth: false,
+    batteryState: 'unplugged'
 }
+
+const updateBatteryState = async () => {
+    DeviceInfo.getPowerState().then(state => {
+        data.batteryState = state.batteryState;
+    });
+};
 
 const updateMovementInfo = async (info) => {
     data.currentLocation = {
@@ -27,7 +35,7 @@ const updateMovementInfo = async (info) => {
     };
     data.currentSpeed = info.coords.speed;
     data.isOnRide = info.coords.speed > 15;
-}
+};
 
 export const parkingDetectionTask = async (taskDataArguments) => {
     const { delay } = taskDataArguments;
@@ -52,6 +60,7 @@ export const parkingDetectionTask = async (taskDataArguments) => {
                     enableHighAccuracy: true
                 }
             );
+            await updateBatteryState();
 
             const dataValue = JSON.stringify(data);
             await AsyncStorage.setItem('data', dataValue);

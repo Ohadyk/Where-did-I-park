@@ -17,6 +17,7 @@ const dataSlice = createSlice({
         isOnRide: false,
         isCurrentlyCharging: false,
         isCurrentlyUsingBluetooth: false,
+        batteryState: 'unplugged'
     },
 
     reducers: {
@@ -64,6 +65,10 @@ const dataSlice = createSlice({
 
         setIsCurrentlyUsingBluetooth(state, action) {
             state.isCurrentlyUsingBluetooth = action.payload
+        },
+
+        setBatteryState(state, action) {
+            state.batteryState = action.payload
         }
     }
 });
