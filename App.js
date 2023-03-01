@@ -65,6 +65,11 @@ const App = () => {
 
     // activates and stops the parking detection algorithm according to the state of the application
     useEffect(() => {
+        if(!isLoggedIn) {
+            BackgroundService.stop().then(r => {});
+            console.log('task stop');
+            return;
+        }
         // run the algorithm to detect parking
         if(appState === 'stable') {
             BackgroundService.stop().then(r => {});
@@ -82,7 +87,7 @@ const App = () => {
             BackgroundService.stop().then(r => {});
             console.log('task stop');
         }
-    }, [appState]);
+    }, [appState, isLoggedIn]);
 
     // init the user data from database and show screens depending on whether the user is logged in or not
     useEffect(() => {
@@ -119,7 +124,10 @@ const App = () => {
             // user didn't logged in
             else {
                 setIsLoggedIn(false);
+                // BackgroundService.stop().then(r => {});
+                // console.log('task stop');
                 clearInterval(updateReduxIntervalRef.current);
+                updateReduxIntervalRef.current = null;
                 console.log('interval stop');
             }
             SplashScreen.hide();
@@ -128,6 +136,7 @@ const App = () => {
         return () => {
             unsubscribe();
             clearInterval(updateReduxIntervalRef.current);
+            updateReduxIntervalRef.current = null;
             console.log('interval stop');
         };
     }, []);
@@ -137,23 +146,23 @@ const App = () => {
             <Stack.Navigator screenOptions={{
                 headerShown: false,
                 gestureEnabled: false,
-                headerTitleAlign: "center",
+                headerTitleAlign: 'center',
                 headerBackTitleVisible: false,
             }}>
                 {isLoggedIn ?
-                    <Stack.Screen name="מיכל ניווט" component={DrawerContainer} />
+                    <Stack.Screen name='מיכל ניווט' component={DrawerContainer} />
                     :
                     <Stack.Group>
-                        <Stack.Screen name="התחברות" component={Login} options={{ headerShown: true }} />
-                        <Stack.Screen name="הרשמה" component={Signup} options={{ headerShown: true }} />
-                        <Stack.Screen name="איפוס סיסמא" component={ForgotPassword} options={{ headerShown: true }} />
+                        <Stack.Screen name='התחברות' component={Login} options={{ headerShown: true }} />
+                        <Stack.Screen name='הרשמה' component={Signup} options={{ headerShown: true }} />
+                        <Stack.Screen name='איפוס סיסמא' component={ForgotPassword} options={{ headerShown: true }} />
                     </Stack.Group>
                 }
             </Stack.Navigator>
 
             <StatusBar
-                barStyle={"dark-content"}
-                backgroundColor={"white"}
+                barStyle={'dark-content'}
+                backgroundColor={'white'}
             />
         </NavigationContainer>
     );
