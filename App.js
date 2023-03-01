@@ -102,6 +102,7 @@ const App = () => {
                     dispatch(dataActions.setAppState(userData.appState));
                     dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
                     dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
+                    dispatch(dataActions.setNumOfLearnedRides(userData.numOfLearnedRides));
                 }
                 // init new user doc in database and data in async storage
                 else {

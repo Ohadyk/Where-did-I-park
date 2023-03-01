@@ -49,6 +49,10 @@ const dataSlice = createSlice({
             console.log('numOfLearnedRides = ', state.numOfLearnedRides);
         },
 
+        setNumOfLearnedRides(state, action) {
+            state.numOfLearnedRides = action.payload;
+        },
+
         setCurrentLocation(state, action) {
             state.currentLocation = action.payload
         },
@@ -62,11 +66,11 @@ const dataSlice = createSlice({
         },
 
         setIsCurrentlyCharging(state, action) {
-            state.isCurrentlyCharging = action.payload
+            state.currentRide.isCurrentlyCharging = action.payload
         },
 
         setIsCurrentlyUsingBluetooth(state, action) {
-            state.isCurrentlyUsingBluetooth = action.payload
+            state.currentRide.isCurrentlyUsingBluetooth = action.payload
         },
 
         setBatteryState(state, action) {
