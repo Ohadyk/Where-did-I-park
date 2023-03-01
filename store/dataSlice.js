@@ -15,9 +15,11 @@ const dataSlice = createSlice({
         },
         currentSpeed: 0,
         isOnRide: false,
-        isCurrentlyCharging: false,
-        isCurrentlyUsingBluetooth: false,
-        batteryState: 'unplugged'
+        batteryState: 'unplugged',
+        currentRide: {
+            isCurrentlyCharging: false,
+            isCurrentlyUsingBluetooth: false
+        }
     },
 
     reducers: {

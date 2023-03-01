@@ -4,7 +4,7 @@ import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
-export const parkingDetectionTask = async (taskDataArguments) => {
+export const updateDataTask = async (taskDataArguments) => {
     const { delay } = taskDataArguments;
 
     await new Promise( async (resolve) => {
@@ -18,8 +18,6 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
         for (let i = 0; BackgroundService.isRunning(); i++) {
             await updateDataInStorage();
-
-            console.log('continue here with parking detection');
 
             await sleep(delay);
         }

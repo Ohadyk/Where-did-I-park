@@ -15,6 +15,7 @@ import { dataActions } from "./store/dataSlice";
 import updateUserData from "./GlobalFunctions/updateUserData";
 import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
+import { updateDataTask } from "./BackgroundTasks/updateDataTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
@@ -30,10 +31,12 @@ const App = () => {
     const appState = useSelector(state => state.data.appState);
     const userConnectingToCharger = useSelector(state => state.data.userConnectingToCharger);
     const userConnectingToBluetooth = useSelector(state => state.data.userConnectingToBluetooth);
+    const numOfLearnedRides = useSelector(state => state.data.numOfLearnedRides);
 
     const dispatch = useDispatch();
 
     const initialPersistData = {
+        numOfLearnedRides: 0,
         currentLocation: {
             latitude: 31.768319,
             longitude: 35.21371,
@@ -42,9 +45,11 @@ const App = () => {
         },
         currentSpeed: 0,
         isOnRide: false,
-        isCurrentlyCharging: false,
-        isCurrentlyUsingBluetooth: false,
-        batteryState: 'unplugged'
+        batteryState: 'unplugged',
+        currentRide: {
+            isCurrentlyCharging: false,
+            isCurrentlyUsingBluetooth: false
+        }
     }
 
     const updateReduxData = async () => {
@@ -62,18 +67,20 @@ const App = () => {
     useEffect(() => {
         // run the algorithm to detect parking
         if(appState === 'stable') {
+            BackgroundService.stop().then(r => {});
             BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-            console.log('parking detection start');
+            console.log('parking detection task start');
         }
         // learn user behavior - update user data depends on parking alerts from user
         else {
             BackgroundService.stop().then(r => {});
-            console.log('parking detection stop');
+            BackgroundService.start(updateDataTask, taskOptions).then(r => {});
+            console.log('update data task start');
         }
 
         return () => {
             BackgroundService.stop().then(r => {});
-            console.log('parking detection stop');
+            console.log('task stop');
         }
     }, [appState]);
 
@@ -96,7 +103,8 @@ const App = () => {
                     const initialUserData = {
                         appState,
                         userConnectingToCharger,
-                        userConnectingToBluetooth
+                        userConnectingToBluetooth,
+                        numOfLearnedRides
                     }
                     await updateUserData(initialUserData);
                     await writeDataToStorage(initialPersistData);
