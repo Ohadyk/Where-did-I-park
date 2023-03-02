@@ -7,6 +7,8 @@ import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/Global
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "../store/dataSlice";
+import readDataFromStorage from "../GlobalFunctions/readDataFromStorage";
+import writeDataToStorage from "../GlobalFunctions/writeDataToStorage";
 
 const IParkedButton = () => {
 
@@ -14,9 +16,14 @@ const IParkedButton = () => {
 
     const dispatch = useDispatch();
 
-    const parkedHandler = () => {
-        console.log('I parked')
-        dispatch(dataActions.toggleAppState());
+    const parkedHandler = async () => {
+        console.log('I parked');
+        const persistData = readDataFromStorage();
+        if(persistData) {
+            persistData.appState = 'stable';
+            await writeDataToStorage(persistData);
+            dispatch(dataActions.setAppState('stable'));
+        }
     };
 
     return (

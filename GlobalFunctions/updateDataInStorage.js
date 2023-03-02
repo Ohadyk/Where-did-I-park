@@ -1,8 +1,10 @@
 import Geolocation from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DeviceInfo from "react-native-device-info";
+import readDataFromStorage from "./readDataFromStorage";
 
 const data = {
+    appState: 'learning',
     numOfLearnedRides: 0,
     currentLocation: {
         latitude: 31.768319,
@@ -18,6 +20,11 @@ const data = {
         isCurrentlyUsingBluetooth: false
     }
 }
+
+const updateAppState = async () => {
+    const persistData = await readDataFromStorage();
+    data.appState = persistData.appState;
+};
 
 const updateBatteryState = async () => {
     DeviceInfo.getPowerState().then(state => {
@@ -48,6 +55,7 @@ const updateDataInStorage = async () => {
         }
     );
     await updateBatteryState();
+    await updateAppState();
 
     const dataValue = JSON.stringify(data);
     await AsyncStorage.setItem('data', dataValue);

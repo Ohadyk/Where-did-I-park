@@ -2,7 +2,7 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
 // Returns the user document data if exists, otherwise null
-const getUserData = async () => {
+const getFirestoreUserData = async () => {
     try {
         const userUid = auth().currentUser.uid;
         const userDoc = await firestore().collection('users').doc(userUid).get();
@@ -18,4 +18,4 @@ const getUserData = async () => {
     return null;
 };
 
-export default getUserData;
+export default getFirestoreUserData;

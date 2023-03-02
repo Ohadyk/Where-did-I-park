@@ -2,7 +2,7 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
 // Updates the user document data in the database
-const updateUserData = async (userData) => {
+const updateDataInFirestore = async (userData) => {
 
     try {
         const userUid = auth().currentUser.uid;
@@ -13,4 +13,4 @@ const updateUserData = async (userData) => {
     }
 };
 
-export default updateUserData;
+export default updateDataInFirestore;

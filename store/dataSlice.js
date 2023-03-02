@@ -25,10 +25,10 @@ const dataSlice = createSlice({
     reducers: {
         toggleAppState(state, action) {
             if(state.appState === 'learning') {
-                state.appState = 'stable';
+                state.appState = 'stable'
             }
             else {
-                state.appState = 'learning';
+                state.appState = 'learning'
             }
         },
 
@@ -45,12 +45,12 @@ const dataSlice = createSlice({
         },
 
         incNumOfLearnedRides(state, action) {
-            state.numOfLearnedRides = state.numOfLearnedRides + 1;
-            console.log('numOfLearnedRides = ', state.numOfLearnedRides);
+            state.numOfLearnedRides = state.numOfLearnedRides + 1
+            console.log('numOfLearnedRides = ', state.numOfLearnedRides)
         },
 
         setNumOfLearnedRides(state, action) {
-            state.numOfLearnedRides = action.payload;
+            state.numOfLearnedRides = action.payload
         },
 
         setCurrentLocation(state, action) {

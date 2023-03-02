@@ -9,13 +9,12 @@ import ForgotPassword from "./Screens/ForgotPassword";
 import DrawerContainer from "./Components/DrawerContainer";
 import SplashScreen from "react-native-splash-screen";
 import auth from "@react-native-firebase/auth";
-import getUserData from "./GlobalFunctions/getUserData";
+import getFirestoreUserData from "./GlobalFunctions/getFirestoreUserData";
 import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "./store/dataSlice";
-import updateUserData from "./GlobalFunctions/updateUserData";
+import updateDataInFirestore from "./GlobalFunctions/updateDataInFirestore";
 import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
-import { updateDataTask } from "./BackgroundTasks/updateDataTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
@@ -36,6 +35,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     const initialPersistData = {
+        appState: 'learning',
         numOfLearnedRides: 0,
         currentLocation: {
             latitude: 31.768319,
@@ -63,46 +63,23 @@ const App = () => {
         }
     };
 
-    // activates and stops the parking detection algorithm according to the state of the application
-    useEffect(() => {
-        if(!isLoggedIn) {
-            BackgroundService.stop().then(r => {});
-            console.log('task stop');
-            return;
-        }
-        // run the algorithm to detect parking
-        if(appState === 'stable') {
-            BackgroundService.stop().then(r => {});
-            BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-            console.log('parking detection task start');
-        }
-        // learn user behavior - update user data depends on parking alerts from user
-        else {
-            BackgroundService.stop().then(r => {});
-            BackgroundService.start(updateDataTask, taskOptions).then(r => {});
-            console.log('update data task start');
-        }
-
-        return () => {
-            BackgroundService.stop().then(r => {});
-            console.log('task stop');
-        }
-    }, [appState, isLoggedIn]);
-
     // init the user data from database and show screens depending on whether the user is logged in or not
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
 
             // user logged in
             if (user) {
-                const userData = await getUserData();
+                const userData = await getFirestoreUserData();
 
-                // init user data in redux
+                // init user data in redux and in async storage
                 if (userData !== null) {
                     dispatch(dataActions.setAppState(userData.appState));
                     dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
                     dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
                     dispatch(dataActions.setNumOfLearnedRides(userData.numOfLearnedRides));
+
+                    initialPersistData.appState = userData.appState;
+                    await writeDataToStorage(initialPersistData);
                 }
                 // init new user doc in database and data in async storage
                 else {
@@ -112,10 +89,12 @@ const App = () => {
                         userConnectingToBluetooth,
                         numOfLearnedRides
                     }
-                    await updateUserData(initialUserData);
+                    await updateDataInFirestore(initialUserData);
                     await writeDataToStorage(initialPersistData);
                 }
                 setIsLoggedIn(true);
+                BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                console.log('task start');
 
                 if(!updateReduxIntervalRef.current) {
                     updateReduxIntervalRef.current = setInterval(updateReduxData, 5000);
@@ -125,8 +104,8 @@ const App = () => {
             // user didn't logged in
             else {
                 setIsLoggedIn(false);
-                // BackgroundService.stop().then(r => {});
-                // console.log('task stop');
+                BackgroundService.stop().then(r => {});
+                console.log('task stop');
                 clearInterval(updateReduxIntervalRef.current);
                 updateReduxIntervalRef.current = null;
                 console.log('interval stop');
@@ -136,6 +115,8 @@ const App = () => {
 
         return () => {
             unsubscribe();
+            BackgroundService.stop().then(r => {});
+            console.log('task stop');
             clearInterval(updateReduxIntervalRef.current);
             updateReduxIntervalRef.current = null;
             console.log('interval stop');
