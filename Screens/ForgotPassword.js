@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
-import PrimaryButton from "../Components/PrimaryButton";
+import PrimaryButton from "../Buttons/PrimaryButton";
 import { LINEAR_GRADIENT_BLUE } from "../StyleSheet/GlobalColors";
 import auth from '@react-native-firebase/auth';
 import GlobalStyles from "../StyleSheet/GlobalStyle";

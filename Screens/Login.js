@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet, TextInput, TouchableWithoutFeedback, View, Keyboard, ScrollView } from "react-native";
 import Animated, { BounceInUp, ZoomInDown } from "react-native-reanimated";
-import PrimaryButton from "../Components/PrimaryButton";
+import PrimaryButton from "../Buttons/PrimaryButton";
 import appIcon from '../assets/icon.png';
 import GlobalStyles from '../StyleSheet/GlobalStyle';
 import Entypo from "react-native-vector-icons/Entypo";

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import GlobalStyles from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
-import PrimaryButton from "../Components/PrimaryButton";
+import PrimaryButton from "../Buttons/PrimaryButton";
 import Lottie from "lottie-react-native";
 import { LINEAR_GRADIENT_BLUE } from "../StyleSheet/GlobalColors";
 import auth from '@react-native-firebase/auth';

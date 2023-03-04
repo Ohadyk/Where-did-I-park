@@ -49,8 +49,8 @@ const dataSlice = createSlice({
             console.log('numOfLearnedRides = ', state.numOfLearnedRides)
         },
 
-        setNumOfLearnedRides(state, action) {
-            state.numOfLearnedRides = action.payload
+        resetNumOfLearnedRides(state, action) {
+            state.numOfLearnedRides = 0
         },
 
         setCurrentLocation(state, action) {

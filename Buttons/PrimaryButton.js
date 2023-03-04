@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
     opacityBtn: {
         margin: 1,
-        width: '98%',
+        width: '99%',
         borderRadius: 10,
         paddingVertical: 10,
         alignItems: 'center',

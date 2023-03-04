@@ -9,20 +9,50 @@ import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "../store/dataSlice";
 import readDataFromStorage from "../GlobalFunctions/readDataFromStorage";
 import writeDataToStorage from "../GlobalFunctions/writeDataToStorage";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 const IParkedButton = () => {
 
     const isOnRide = useSelector(state => state.data.isOnRide);
+    const numOfLearnedRides = useSelector(state => state.data.numOfLearnedRides);
 
     const dispatch = useDispatch();
 
-    const parkedHandler = async () => {
-        console.log('I parked');
+    // changes the app state to stable state. update database, async storage and redux
+    const setStableAppState = async () => {
         const persistData = readDataFromStorage();
         if(persistData) {
-            persistData.appState = 'stable';
-            await writeDataToStorage(persistData);
-            dispatch(dataActions.setAppState('stable'));
+            try{
+                const userUid = auth().currentUser.uid;
+                await firestore().collection('users').doc(userUid).set({
+                        appState: 'stable',
+                        numOfLearnedRides: 0
+                    },
+                    { merge: true }
+                );
+                persistData.appState = 'stable';
+                await writeDataToStorage(persistData);
+                dispatch(dataActions.setAppState('stable'));
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
+    // handles the parking event. saves the location and checks heuristics
+    const parkingHandler = async () => {
+        console.log('I parked');
+
+        // app finished learn the user behavior, switch to stable state
+        if(numOfLearnedRides+1 >= 5) {
+            await setStableAppState();
+            dispatch(dataActions.resetNumOfLearnedRides());
+        }
+        // save the location and learn params for heuristics
+        else {
+            dispatch(dataActions.incNumOfLearnedRides());
         }
     };
 
@@ -32,7 +62,7 @@ const IParkedButton = () => {
             entering={SlideInDown.duration(700).delay(1000)}
             exiting={SlideOutDown.duration(500).delay(0)}
         >
-            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={parkedHandler} disabled={isOnRide}>
+            <TouchableOpacity underlayColor='white' activeOpacity={0.7} onPress={parkingHandler} disabled={isOnRide}>
                 <LinearGradient
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
