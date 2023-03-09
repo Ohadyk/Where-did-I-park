@@ -1,0 +1,74 @@
+{
+  "IcoMoonType": "selection",
+  "icons": [
+    {
+      "icon": {
+        "paths": [
+          "M446.807 560.728c-107.008 21.439-206.021 41.276-160.355 453.611-226.19-394.578-251.634-514.395-273.863-620.776-28.401-135.922 12.172-393.564 273.863-393.564 280.093 0 427.113 272.857 317.477 465.582-40.877 71.858-100.133 83.729-157.122 95.146zM475.379 321.64c-0.057-0.74-0.107-1.391-0.142-1.948-6.844-106.623-104.132-152.874-218.636-152.874-71.048 0-71.913 36.779-74.273 137.112-0.12 5.090-0.244 10.343-0.38 15.762l-0.031 1.261c-2.729 108.129-3.565 141.224 74.684 141.224 229.336-3.128 220.594-116.915 218.779-140.537z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "width": 646,
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "parking-icon"
+        ],
+        "colorPermutations": {
+          "2552552551712551": [
+            {}
+          ]
+        }
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 20,
+        "id": 1,
+        "name": "parking-icon",
+        "prevSize": 32,
+        "code": 59648
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 0
+    }
+  ],
+  "height": 1024,
+  "metadata": {
+    "name": "icomoon"
+  },
+  "preferences": {
+    "showGlyphs": true,
+    "showQuickUse": true,
+    "showQuickUse2": true,
+    "showSVGs": true,
+    "fontPref": {
+      "prefix": "icon-",
+      "metadata": {
+        "fontFamily": "icomoon"
+      },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
+      "embed": false
+    },
+    "imagePref": {
+      "prefix": "icon-",
+      "png": true,
+      "useClassSelector": true,
+      "color": 0,
+      "bgColor": 16777215,
+      "classSelector": ".icon",
+      "name": "icomoon"
+    },
+    "historySize": 50,
+    "showCodes": true,
+    "gridSize": 16
+  }
+}
