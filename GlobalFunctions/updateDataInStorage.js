@@ -1,5 +1,6 @@
 import Geolocation from "react-native-geolocation-service";
 import DeviceInfo from "react-native-device-info";
+import { BluetoothStatus } from "react-native-bluetooth-status";
 import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
 
@@ -29,6 +30,14 @@ const updateCurrentRideParams = async () => {
     if(data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
         data.currentRide.chargedDuringTheRide = true;
     }
+    if(data.isOnRide && data.bluetoothState) {
+        data.currentRide.chargedDuringTheRide = true;
+    }
+};
+
+// updates the bluetooth state
+const updateBluetoothState = async () => {
+    data.bluetoothState = BluetoothStatus.state();
 };
 
 // updates the battery state
@@ -65,6 +74,7 @@ const updateDataInStorage = async () => {
         }
     );
     await updateBatteryState();
+    await updateBluetoothState();   // ------------------------------------------------------------
     await updateCurrentRideParams();
 
     await setStorageAppState();
