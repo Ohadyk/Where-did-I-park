@@ -1,37 +1,44 @@
-import Geolocation from "@react-native-community/geolocation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Geolocation from "react-native-geolocation-service";
 import DeviceInfo from "react-native-device-info";
+import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
 
-const data = {
-    appState: 'learning',
-    numOfLearnedRides: 0,
-    currentLocation: {
-        latitude: 31.768319,
-        longitude: 35.21371,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-    },
-    currentSpeed: 0,
-    isOnRide: false,
-    batteryState: 'unplugged',
-    currentRide: {
-        isCurrentlyCharging: false,
-        isCurrentlyUsingBluetooth: false
-    }
-}
+const data = {}
 
-const updateAppState = async () => {
-    const persistData = await readDataFromStorage();
-    data.appState = persistData.appState;
+// read the wanted app state from async storage and sets the needed app state
+const setStorageAppState = async () => {
+    const persistData = await readDataFromStorage('data');
+    const internalUsageData = await readDataFromStorage('internalUsageData');
+
+    if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'stable') {
+        data.appState = 'stable';
+    }
+    else if(persistData.appState === 'stable' && internalUsageData.wantedAppState === 'learning') {
+        data.appState = 'learning';
+    }
+    else if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'learning') {
+        data.appState = 'learning';
+    }
+    else if(persistData.appState === 'stable' && internalUsageData.wantedAppState === 'stable') {
+        data.appState = 'stable';
+    }
 };
 
+// updates the battery and bluetooth params indicating if the user used them on ride
+const updateCurrentRideParams = async () => {
+    if(data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
+        data.currentRide.chargedDuringTheRide = true;
+    }
+};
+
+// updates the battery state
 const updateBatteryState = async () => {
     DeviceInfo.getPowerState().then(state => {
         data.batteryState = state.batteryState;
     });
 };
 
+// updates the location, speed and whether the user is on ride or not
 const updateMovementInfo = async (info) => {
     data.currentLocation = {
         latitude: info.coords.latitude,
@@ -43,22 +50,28 @@ const updateMovementInfo = async (info) => {
     data.isOnRide = info.coords.speed > 15;
 };
 
+// updates the data in the async storage and returns the updated data
 const updateDataInStorage = async () => {
 
     Geolocation.getCurrentPosition(
-        await updateMovementInfo,
+        async (info) => {
+            await updateMovementInfo(info)
+        },
         (error) => {
-            console.log(error)
+            console.log(error);
         },
         {
             enableHighAccuracy: true
         }
     );
     await updateBatteryState();
-    await updateAppState();
+    await updateCurrentRideParams();
 
-    const dataValue = JSON.stringify(data);
-    await AsyncStorage.setItem('data', dataValue);
+    await setStorageAppState();
+
+    await writeDataToStorage('data', data, true);
+
+    return data;
 };
 
 export default updateDataInStorage;

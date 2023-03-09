@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
 import PrimaryButton from "../Buttons/PrimaryButton";
@@ -40,7 +40,7 @@ const ForgotPassword = ({navigation}) => {
         try {
             await auth().sendPasswordResetEmail(email);
             navigation.navigate('התחברות')
-            alert('נשלח אליך אימייל לאיפוס הסיסמא')
+            Alert.alert('הודעה', 'נשלח אליך אימייל לאיפוס הסיסמא');
         }
         catch (error) {
             console.log(error)

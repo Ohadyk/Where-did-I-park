@@ -7,7 +7,7 @@ import {
     Text,
     Keyboard,
     TouchableWithoutFeedback,
-    ScrollView,
+    ScrollView, Alert,
 } from "react-native";
 import GlobalStyles from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -82,7 +82,7 @@ const Signup = ({navigation}) => {
         try {
             await auth().createUserWithEmailAndPassword(email, password);
             navigation.navigate('התחברות')
-            alert('נרשמת בהצלחה')
+            Alert.alert('הודעה', 'נרשמת בהצלחה');
         }
         catch (error) {
             console.log(error)

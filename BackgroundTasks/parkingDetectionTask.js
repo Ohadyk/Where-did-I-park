@@ -1,7 +1,6 @@
 import BackgroundService from "react-native-background-actions";
 import { PermissionsAndroid } from "react-native";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
-import readDataFromStorage from "../GlobalFunctions/readDataFromStorage";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -17,14 +16,12 @@ export const parkingDetectionTask = async (taskDataArguments) => {
             BackgroundService.stop().then(r => {});
         }
 
-        for (let i = 0; BackgroundService.isRunning(); i++) {
-            await updateDataInStorage();
+        for(let i = 0; BackgroundService.isRunning(); i++) {
+            const updatedData = await updateDataInStorage();
 
-            const persistData = await readDataFromStorage();
-            console.log('parkingDetection task appState = ', persistData.appState);
-            // if(persistData.appState === 'stable') {
-            //
-            // }
+            if(updatedData.appState === 'stable') {
+
+            }
 
             await sleep(delay);
         }

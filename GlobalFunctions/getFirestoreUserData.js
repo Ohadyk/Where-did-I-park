@@ -1,7 +1,7 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
-// Returns the user document data if exists, otherwise null
+// Returns the user document data from database if exists, otherwise null
 const getFirestoreUserData = async () => {
     try {
         const userUid = auth().currentUser.uid;

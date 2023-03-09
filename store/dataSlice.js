@@ -7,6 +7,7 @@ const dataSlice = createSlice({
         userConnectingToCharger: false,
         userConnectingToBluetooth: false,
         numOfLearnedRides: 0,
+        learnedRides: [],
         currentLocation: {
             latitude: 31.768319,
             longitude: 35.21371,
@@ -17,9 +18,9 @@ const dataSlice = createSlice({
         isOnRide: false,
         batteryState: 'unplugged',
         currentRide: {
-            isCurrentlyCharging: false,
-            isCurrentlyUsingBluetooth: false
-        }
+            chargedDuringTheRide: false,
+            usedBluetoothDuringTheRide: false
+        },
     },
 
     reducers: {
@@ -44,13 +45,28 @@ const dataSlice = createSlice({
             state.userConnectingToBluetooth = action.payload
         },
 
+        setNumOfLearnedRides(state, action) {
+            state.numOfLearnedRides = action.payload
+        },
+
         incNumOfLearnedRides(state, action) {
             state.numOfLearnedRides = state.numOfLearnedRides + 1
-            console.log('numOfLearnedRides = ', state.numOfLearnedRides)
         },
 
         resetNumOfLearnedRides(state, action) {
             state.numOfLearnedRides = 0
+        },
+
+        setLearnedRides(state, action) {
+            state.learnedRides = action.payload
+        },
+
+        addLearnedRide(state, action) {
+            state.learnedRides.push(action.payload)
+        },
+
+        resetLearnedRides(state, action) {
+            state.learnedRides = []
         },
 
         setCurrentLocation(state, action) {

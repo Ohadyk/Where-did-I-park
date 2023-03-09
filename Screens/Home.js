@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import HomeMap from "../Components/HomeMap";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import DrawerButton from "../Buttons/DrawerButton";
 import IParkedButton from "../Buttons/IParkedButton";
 import { useSelector } from "react-redux";
@@ -9,8 +9,6 @@ import StableStateCard from "../Components/StableStateCard";
 import HomeHeader from "../Components/HomeHeader";
 
 const Home = () => {
-
-    const batteryState = useSelector(state => state.data.batteryState);
 
     const appState = useSelector(state => state.data.appState);
 
@@ -26,7 +24,6 @@ const Home = () => {
                     <>
                         <IParkedButton />
                         <LearningStateCard />
-                        <Text style={{margin: 50}}>{batteryState}</Text>
                     </>
                     :
                     null

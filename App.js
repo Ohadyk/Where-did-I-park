@@ -10,14 +10,15 @@ import DrawerContainer from "./Components/DrawerContainer";
 import SplashScreen from "react-native-splash-screen";
 import auth from "@react-native-firebase/auth";
 import getFirestoreUserData from "./GlobalFunctions/getFirestoreUserData";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { dataActions } from "./store/dataSlice";
-import updateDataInFirestore from "./GlobalFunctions/updateDataInFirestore";
+import setDataDocInFirestore from "./GlobalFunctions/setDataDocInFirestore";
 import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
+import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,16 +28,14 @@ const App = () => {
 
     const updateReduxIntervalRef = useRef(null);
 
-    const appState = useSelector(state => state.data.appState);
-    const userConnectingToCharger = useSelector(state => state.data.userConnectingToCharger);
-    const userConnectingToBluetooth = useSelector(state => state.data.userConnectingToBluetooth);
-    const numOfLearnedRides = useSelector(state => state.data.numOfLearnedRides);
-
     const dispatch = useDispatch();
 
     const initialPersistData = {
         appState: 'learning',
+        userConnectingToCharger: false,
+        userConnectingToBluetooth: false,
         numOfLearnedRides: 0,
+        learnedRides: [],
         currentLocation: {
             latitude: 31.768319,
             longitude: 35.21371,
@@ -47,15 +46,22 @@ const App = () => {
         isOnRide: false,
         batteryState: 'unplugged',
         currentRide: {
-            isCurrentlyCharging: false,
-            isCurrentlyUsingBluetooth: false
+            chargedDuringTheRide: false,
+            usedBluetoothDuringTheRide: false
         }
     }
 
-    const updateReduxData = async () => {
-        const persistData = await readDataFromStorage();
+    const internalUsageData = {
+        wantedAppState: 'learning',
+        parkedVehicleLocation: null
+    }
+
+    // updates the redux with persist data from async storage for update the UI
+    const updateDataInRedux = async () => {
+        const persistData = await readDataFromStorage('data');
 
         if(persistData !== null) {
+            dispatch(dataActions.setAppState(persistData.appState));
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
@@ -71,33 +77,45 @@ const App = () => {
             if (user) {
                 const userData = await getFirestoreUserData();
 
-                // init user data in redux and in async storage
+                // init user data in async storage and redux
                 if (userData !== null) {
+
+                    initialPersistData.appState = userData.appState;
+                    initialPersistData.learnedRides = userData.learnedRides;
+                    initialPersistData.numOfLearnedRides = userData.numOfLearnedRides;
+                    const initialDataValue = JSON.stringify(initialPersistData);
+
+                    internalUsageData.wantedAppState = userData.appState;
+                    const internalDataValue = JSON.stringify(internalUsageData);
+
+                    await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
+
                     dispatch(dataActions.setAppState(userData.appState));
                     dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
                     dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
                     dispatch(dataActions.setNumOfLearnedRides(userData.numOfLearnedRides));
-
-                    initialPersistData.appState = userData.appState;
-                    await writeDataToStorage(initialPersistData);
                 }
                 // init new user doc in database and data in async storage
                 else {
                     const initialUserData = {
-                        appState,
-                        userConnectingToCharger,
-                        userConnectingToBluetooth,
-                        numOfLearnedRides
+                        appState: 'learning',
+                        userConnectingToCharger: false,
+                        userConnectingToBluetooth: false,
+                        numOfLearnedRides: 0,
+                        learnedRides: []
                     }
-                    await updateDataInFirestore(initialUserData);
-                    await writeDataToStorage(initialPersistData);
+                    await setDataDocInFirestore(initialUserData);
+                    await writeDataToStorage('data', initialPersistData, false);
+
+                    // INIT INTERNAL USAGE DATA -----------------------------------------------------------
                 }
                 setIsLoggedIn(true);
+
                 BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
                 console.log('task start');
 
                 if(!updateReduxIntervalRef.current) {
-                    updateReduxIntervalRef.current = setInterval(updateReduxData, 5000);
+                    updateReduxIntervalRef.current = setInterval(updateDataInRedux, 5000);
                     console.log('interval start');
                 }
             }

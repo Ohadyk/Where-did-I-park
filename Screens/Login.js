@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, TextInput, TouchableWithoutFeedback, View, Keyboard, ScrollView } from "react-native";
+import { StyleSheet, TextInput, TouchableWithoutFeedback, View, Keyboard, ScrollView, Alert } from "react-native";
 import Animated, { BounceInUp, ZoomInDown } from "react-native-reanimated";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import appIcon from '../assets/icon.png';
+import appIcon from '../assets/appIcon.png';
 import GlobalStyles from '../StyleSheet/GlobalStyle';
 import Entypo from "react-native-vector-icons/Entypo";
 import { LINEAR_GRADIENT_BLUE, LINEAR_GRADIENT_GREY } from "../StyleSheet/GlobalColors";
@@ -36,19 +36,19 @@ const Login = ({navigation}) => {
 
         if (!email) {
             emailRef.current.focus()
-            alert('אנא מלא/י את כל הפרטים')
+            Alert.alert('שגיאה', 'אנא מלא/י את כל הפרטים');
         }
         else if(!emailValidationRegex.test(email)) {
             emailRef.current.focus()
-            alert('אימייל לא חוקי')
+            Alert.alert('שגיאה', 'אימייל לא חוקי');
         }
         else if(!password) {
             passwordRef.current.focus()
-            alert('אנא מלא/י את כל הפרטים')
+            Alert.alert('שגיאה', 'אנא מלא/י את כל הפרטים');
         }
         else if(password.length < 6) {
             passwordRef.current.focus()
-            alert('סיסמא לא חוקית')
+            Alert.alert('שגיאה', 'סיסמא לא חוקית');
         }
         else {
             await loginHandler()
@@ -68,14 +68,14 @@ const Login = ({navigation}) => {
 
             if (error.code === 'auth/invalid-email') {
                 emailRef.current.focus()
-                alert('אימייל לא חוקי')
+                Alert.alert('שגיאה', 'אימייל לא חוקי');
             }
             else if (error.code === 'auth/invalid-password') {
                 passwordRef.current.focus()
-                alert('סיסמא לא חוקית')
+                Alert.alert('שגיאה', 'סיסמא לא חוקית');
             }
             else {
-                alert('שגיאה. אנא נסה/י שוב מאוחר יותר')
+                Alert.alert('שגיאה', 'אנא נסה/י שוב מאוחר יותר');
             }
         }
     };
