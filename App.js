@@ -19,6 +19,7 @@ import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
+import { internalUsageDataActions } from "./store/internalUsageDataSlice";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,7 @@ const App = () => {
     // updates the redux with persist data from async storage for update the UI
     const updateDataInRedux = async () => {
         const persistData = await readDataFromStorage('data');
+        const internalData = await readDataFromStorage('internalUsageData');
 
         if(persistData !== null) {
             dispatch(dataActions.setAppState(persistData.appState));
@@ -66,6 +68,10 @@ const App = () => {
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
             dispatch(dataActions.setBatteryState(persistData.batteryState));
+        }
+        if(internalData !== null) {
+            dispatch(internalUsageDataActions.setWantedAppState(internalData.wantedAppState));
+            dispatch(internalUsageDataActions.setParkedVehicleLocation(internalData.parkedVehicleLocation));
         }
     };
 
@@ -89,11 +95,6 @@ const App = () => {
                     const internalDataValue = JSON.stringify(internalUsageData);
 
                     await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
-
-                    dispatch(dataActions.setAppState(userData.appState));
-                    dispatch(dataActions.setUserConnectingToCharger(userData.userConnectingToCharger));
-                    dispatch(dataActions.setUserConnectingToBluetooth(userData.userConnectingToBluetooth));
-                    dispatch(dataActions.setNumOfLearnedRides(userData.numOfLearnedRides));
                 }
                 // init new user doc in database and data in async storage
                 else {
@@ -106,8 +107,7 @@ const App = () => {
                     }
                     await setDataDocInFirestore(initialUserData);
                     await writeDataToStorage('data', initialPersistData, false);
-
-                    // INIT INTERNAL USAGE DATA -----------------------------------------------------------
+                    await writeDataToStorage('internalUsageData', internalUsageData, false);
                 }
                 setIsLoggedIn(true);
 
