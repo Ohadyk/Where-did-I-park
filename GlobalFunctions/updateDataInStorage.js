@@ -31,7 +31,7 @@ const updateCurrentRideParams = async () => {
         data.currentRide.chargedDuringTheRide = true;
     }
     if(data.isOnRide && data.bluetoothState) {
-        data.currentRide.chargedDuringTheRide = true;
+        data.currentRide.usedBluetoothDuringTheRide = true;
     }
 };
 
@@ -74,7 +74,7 @@ const updateDataInStorage = async () => {
         }
     );
     await updateBatteryState();
-    await updateBluetoothState();   // ------------------------------------------------------------
+    await updateBluetoothState();
     await updateCurrentRideParams();
 
     await setStorageAppState();

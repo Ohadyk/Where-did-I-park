@@ -32,8 +32,8 @@ const IParkedButton = () => {
                     latitude: currentLocation.latitude,
                     longitude: currentLocation.longitude,
                 },
-                isCharged: currentRide.chargedDuringTheRide,
-                isUsedBluetooth: currentRide.usedBluetoothDuringTheRide,
+                chargedDuringTheRide: currentRide.chargedDuringTheRide,
+                usedBluetoothDuringTheRide: currentRide.usedBluetoothDuringTheRide,
             };
             rides.push(ride);
 
