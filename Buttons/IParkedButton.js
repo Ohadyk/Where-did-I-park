@@ -47,7 +47,13 @@ const IParkedButton = () => {
                 learnedRides: rides,
                 numOfLearnedRides: numOfLearnedRides+1
             };
+
+            const updatedLearnedRides = {
+                updatedLearnedRides: rides
+            };
+
             await writeDataToStorage('data', persistData, true);
+            await writeDataToStorage('internalUsageData', updatedLearnedRides, true);
 
             dispatch(dataActions.addLearnedRide(ride));
             dispatch(dataActions.incNumOfLearnedRides());
@@ -58,7 +64,7 @@ const IParkedButton = () => {
         }
     };
 
-    // changes the app state to stable state. update database and async storage
+    // changes the app state to stable state. updates database and async storage
     const setStableAppState = async () => {
         try {
             const userData = {
@@ -95,15 +101,15 @@ const IParkedButton = () => {
     // handles the parking event. saves the location and checks heuristics
     const parkingHandler = async () => {
 
+        // save the current location as the parking location
         await setParkingLocation();
+
+        // save the current ride params for heuristics
+        await updateLearnedRideData();
 
         // app finished learn the user behavior, switch to stable state
         if (numOfLearnedRides + 1 >= 5) {
             await setStableAppState();
-        }
-        // save the current ride params for heuristics
-        else {
-            await updateLearnedRideData();
         }
     };
 

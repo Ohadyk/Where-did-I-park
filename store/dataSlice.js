@@ -17,7 +17,7 @@ const dataSlice = createSlice({
         currentSpeed: 0,
         isOnRide: false,
         batteryState: 'unplugged',
-        bluetoothState: false,
+        bluetoothConnected: false,
         currentRide: {
             chargedDuringTheRide: false,
             usedBluetoothDuringTheRide: false
@@ -25,15 +25,6 @@ const dataSlice = createSlice({
     },
 
     reducers: {
-        toggleAppState(state, action) {
-            if(state.appState === 'learning') {
-                state.appState = 'stable'
-            }
-            else {
-                state.appState = 'learning'
-            }
-        },
-
         setAppState(state, action) {
             state.appState = action.payload
         },
@@ -82,16 +73,20 @@ const dataSlice = createSlice({
             state.isOnRide = action.payload
         },
 
-        setIsCurrentlyCharging(state, action) {
-            state.currentRide.isCurrentlyCharging = action.payload
-        },
-
-        setIsCurrentlyUsingBluetooth(state, action) {
-            state.currentRide.isCurrentlyUsingBluetooth = action.payload
-        },
-
         setBatteryState(state, action) {
             state.batteryState = action.payload
+        },
+
+        setBluetoothConnected(state, action) {
+            state.bluetoothConnected = action.payload
+        },
+
+        setChargedDuringTheRide(state, action) {
+            state.currentRide.chargedDuringTheRide = action.payload
+        },
+
+        setIsUsedBluetoothDuringTheRide(state, action) {
+            state.currentRide.usedBluetoothDuringTheRide = action.payload
         }
     }
 });

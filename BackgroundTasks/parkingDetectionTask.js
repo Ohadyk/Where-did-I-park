@@ -1,5 +1,5 @@
 import BackgroundService from "react-native-background-actions";
-import { PermissionsAndroid } from "react-native";
+import { Alert, PermissionsAndroid } from "react-native";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
@@ -13,6 +13,7 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
         if(userPermissions === 'denied') {
             console.log('location permissions denied');
+            Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד");
             BackgroundService.stop().then(r => {});
         }
 

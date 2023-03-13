@@ -17,7 +17,6 @@ import BackgroundService from "react-native-background-actions";
 import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
 import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
-import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
 import { internalUsageDataActions } from "./store/internalUsageDataSlice";
 
@@ -46,7 +45,7 @@ const App = () => {
         currentSpeed: 0,
         isOnRide: false,
         batteryState: 'unplugged',
-        bluetoothState: false,
+        bluetoothConnected: false,
         currentRide: {
             chargedDuringTheRide: false,
             usedBluetoothDuringTheRide: false
@@ -69,6 +68,7 @@ const App = () => {
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
             dispatch(dataActions.setBatteryState(persistData.batteryState));
+            dispatch(dataActions.setBluetoothConnected(persistData.bluetoothConnected));
         }
         if(internalData !== null) {
             dispatch(internalUsageDataActions.setWantedAppState(internalData.wantedAppState));
@@ -107,8 +107,11 @@ const App = () => {
                         learnedRides: []
                     }
                     await setDataDocInFirestore(initialUserData);
-                    await writeDataToStorage('data', initialPersistData, false);
-                    await writeDataToStorage('internalUsageData', internalUsageData, false);
+
+                    const initialDataValue = JSON.stringify(initialPersistData);
+                    const internalDataValue = JSON.stringify(internalUsageData);
+
+                    await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
                 }
                 setIsLoggedIn(true);
 

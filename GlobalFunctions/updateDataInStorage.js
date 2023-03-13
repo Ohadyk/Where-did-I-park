@@ -1,8 +1,9 @@
 import Geolocation from "react-native-geolocation-service";
 import DeviceInfo from "react-native-device-info";
-import { BluetoothStatus } from "react-native-bluetooth-status";
+import RNBluetoothClassic from 'react-native-bluetooth-classic';
 import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
+import updateUserBehavior from "./updateUserBehavior";
 
 const data = {}
 
@@ -13,6 +14,7 @@ const setStorageAppState = async () => {
 
     if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'stable') {
         data.appState = 'stable';
+        await updateUserBehavior();
     }
     else if(persistData.appState === 'stable' && internalUsageData.wantedAppState === 'learning') {
         data.appState = 'learning';
@@ -30,14 +32,17 @@ const updateCurrentRideParams = async () => {
     if(data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
         data.currentRide.chargedDuringTheRide = true;
     }
-    if(data.isOnRide && data.bluetoothState) {
+    if(data.isOnRide && data.bluetoothConnected) {
         data.currentRide.usedBluetoothDuringTheRide = true;
     }
 };
 
 // updates the bluetooth state
 const updateBluetoothState = async () => {
-    data.bluetoothState = BluetoothStatus.state();
+    const isEnabled = await RNBluetoothClassic.isBluetoothEnabled();
+
+    data.bluetoothConnected = isEnabled;
+    console.log('isEnabled = ', isEnabled);
 };
 
 // updates the battery state
