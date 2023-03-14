@@ -23,10 +23,10 @@ const updateUserBehavior = async () => {
             }
         });
 
-        if(numOfChargedRides >= 2) {
+        if(numOfChargedRides > 2) {
             userBehavior.userConnectingToCharger = true;
         }
-        if(numOfBluetoothRides >= 2) {
+        if(numOfBluetoothRides > 2) {
             userBehavior.userConnectingToBluetooth = true;
         }
 

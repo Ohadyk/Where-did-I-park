@@ -48,12 +48,12 @@ const IParkedButton = () => {
                 numOfLearnedRides: numOfLearnedRides+1
             };
 
-            const updatedLearnedRides = {
+            const learnedRidesForTask = {
                 updatedLearnedRides: rides
             };
 
             await writeDataToStorage('data', persistData, true);
-            await writeDataToStorage('internalUsageData', updatedLearnedRides, true);
+            await writeDataToStorage('internalUsageData', learnedRidesForTask, true);
 
             dispatch(dataActions.addLearnedRide(ride));
             dispatch(dataActions.incNumOfLearnedRides());

@@ -8,7 +8,7 @@ import updateUserBehavior from "./updateUserBehavior";
 const data = {}
 
 // read the wanted app state from async storage and sets the needed app state
-const setStorageAppState = async () => {
+const updateAppState = async () => {
     const persistData = await readDataFromStorage('data');
     const internalUsageData = await readDataFromStorage('internalUsageData');
 
@@ -82,7 +82,7 @@ const updateDataInStorage = async () => {
     await updateBluetoothState();
     await updateCurrentRideParams();
 
-    await setStorageAppState();
+    await updateAppState();
 
     await writeDataToStorage('data', data, true);
 
