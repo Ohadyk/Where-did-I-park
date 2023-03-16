@@ -22,7 +22,7 @@ const IParkedButton = () => {
 
     const dispatch = useDispatch();
 
-    // updates the learned ride data in firestore and redux
+    // updates the learned ride data in firestore, storage and redux
     const updateLearnedRideData = async () => {
         try {
             let rides = [...learnedRides];
@@ -56,7 +56,6 @@ const IParkedButton = () => {
             await writeDataToStorage('internalUsageData', learnedRidesForTask, true);
 
             dispatch(dataActions.addLearnedRide(ride));
-            dispatch(dataActions.incNumOfLearnedRides());
         }
         catch (error) {
             console.log(error);
@@ -110,6 +109,9 @@ const IParkedButton = () => {
         // app finished learn the user behavior, switch to stable state
         if (numOfLearnedRides + 1 >= 5) {
             await setStableAppState();
+        }
+        else {
+            dispatch(dataActions.incNumOfLearnedRides());
         }
     };
 
