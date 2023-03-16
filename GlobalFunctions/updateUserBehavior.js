@@ -1,11 +1,8 @@
 import updateDataInFirestore from "./updateDataInFirestore";
-import readDataFromStorage from "./readDataFromStorage";
 import writeDataToStorage from "./writeDataToStorage";
 
-const updateUserBehavior = async () => {
+const updateUserBehavior = async (internalUsageData) => {
     try {
-        const internalUsageData = await readDataFromStorage('internalUsageData');
-
         const userBehavior = {
             userConnectingToCharger: false,
             userConnectingToBluetooth: false

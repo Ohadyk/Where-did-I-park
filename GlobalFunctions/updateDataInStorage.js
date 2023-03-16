@@ -14,7 +14,7 @@ const updateAppState = async () => {
 
     if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'stable') {
         data.appState = 'stable';
-        await updateUserBehavior();
+        await updateUserBehavior(internalUsageData);
     }
     else if(persistData.appState === 'stable' && internalUsageData.wantedAppState === 'learning') {
         data.appState = 'learning';
