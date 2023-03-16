@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import firestore from "@react-native-firebase/firestore";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";
@@ -13,6 +13,8 @@ import writeDataToStorage from "../GlobalFunctions/writeDataToStorage";
 import updateDataInFirestore from "../GlobalFunctions/updateDataInFirestore";
 
 const IParkedButton = () => {
+
+    const [loading, setLoading] = useState(false);
 
     const isOnRide = useSelector(state => state.data.isOnRide);
     const learnedRides = useSelector(state => state.data.learnedRides);
@@ -99,6 +101,7 @@ const IParkedButton = () => {
 
     // handles the parking event. saves the location and checks heuristics
     const parkingHandler = async () => {
+        setLoading(true);
 
         // save the current location as the parking location
         await setParkingLocation();
@@ -113,6 +116,8 @@ const IParkedButton = () => {
         else {
             dispatch(dataActions.incNumOfLearnedRides());
         }
+
+        setLoading(false);
     };
 
     return (
@@ -121,16 +126,20 @@ const IParkedButton = () => {
             entering={SlideInDown.duration(700).delay(1000)}
             exiting={SlideOutDown.duration(500).delay(0)}
         >
-            <TouchableOpacity underlayColor="white" activeOpacity={0.7} onPress={parkingHandler} disabled={isOnRide}>
-                <LinearGradient
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    colors={isOnRide ? LINEAR_GRADIENT_GREY : LINEAR_GRADIENT_BLUE}
-                    style={[styles.parkedButton, GlobalStyle.shadow]}
-                >
-                    <Icon type="material-community-icons" name="car-brake-parking" style={styles.icon} />
-                </LinearGradient>
-            </TouchableOpacity>
+            {loading ?
+                <ActivityIndicator style={{alignSelf: 'center', margin: 20, bottom: 25}} color="#0047FF" size="large" />
+                :
+                <TouchableOpacity underlayColor="white" activeOpacity={0.7} onPress={parkingHandler} disabled={isOnRide}>
+                    <LinearGradient
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        colors={isOnRide ? LINEAR_GRADIENT_GREY : LINEAR_GRADIENT_BLUE}
+                        style={[styles.parkedButton, GlobalStyle.shadow]}
+                    >
+                        <Icon type="material-community-icons" name="car-brake-parking" style={styles.icon} />
+                    </LinearGradient>
+                </TouchableOpacity>
+            }
         </Animated.View>
     );
 };
