@@ -1,5 +1,15 @@
 import React, { useRef, useState } from "react";
-import { Alert, Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import {
+    ActivityIndicator,
+    Alert,
+    Keyboard,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+} from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
 import PrimaryButton from "../Buttons/PrimaryButton";
@@ -9,6 +19,8 @@ import GlobalStyles from "../StyleSheet/GlobalStyle";
 
 const ForgotPassword = ({navigation}) => {
 
+    const [loading, setLoading] = useState(false);
+
     const [email, setEmail] = useState('');
     const [emailValidError, setEmailValidError] = useState('');
     const [serverError, setServerError] = useState(false);
@@ -17,6 +29,8 @@ const ForgotPassword = ({navigation}) => {
 
     // validate the user input when click on reset password button
     const onResetPassword = async () => {
+        setLoading(true);
+
         const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         setEmailValidError('')
@@ -33,6 +47,7 @@ const ForgotPassword = ({navigation}) => {
         else {
             await resetPasswordHandler()
         }
+        setLoading(false);
     }
 
     // reset the user password if the inputs are valid
@@ -67,18 +82,22 @@ const ForgotPassword = ({navigation}) => {
                                         setEmail(value);
                                     }}
                                 />
-                                <Entypo style={GlobalStyle.inputIcon} name='mail' size={25} />
+                                <Entypo style={GlobalStyle.inputIcon} name='mail' size={20} />
                             </View>
                             {emailValidError ? <Text style={GlobalStyle.inputErrorTxt}>{emailValidError}</Text> : null}
                         </View>
                         {serverError ? <Text style={GlobalStyles.inputErrorTxt}>שגיאה. אנא נסה שוב מאוחר יותר</Text> : null}
                         <View style={GlobalStyle.row}>
-                            <PrimaryButton
-                                text={'שלח קישור לאיפוס'}
-                                width={'95%'}
-                                colors={LINEAR_GRADIENT_BLUE}
-                                onClick={onResetPassword}
-                            />
+                            {loading ?
+                                <ActivityIndicator style={{alignSelf: 'center', margin: 20}} color="#0047FF" size="large" />
+                                :
+                                <PrimaryButton
+                                    text={'שלח קישור לאיפוס'}
+                                    width={'95%'}
+                                    colors={LINEAR_GRADIENT_BLUE}
+                                    onClick={onResetPassword}
+                                />
+                            }
                         </View>
                     </View>
                 </View>

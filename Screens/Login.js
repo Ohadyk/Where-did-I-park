@@ -1,5 +1,14 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, TextInput, TouchableWithoutFeedback, View, Keyboard, ScrollView, Alert } from "react-native";
+import {
+    StyleSheet,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+    Keyboard,
+    ScrollView,
+    Alert,
+    ActivityIndicator,
+} from "react-native";
 import Animated, { BounceInUp, ZoomInDown } from "react-native-reanimated";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import appIcon from '../assets/appIcon.png';
@@ -11,6 +20,8 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../store/authSlice";
 
 const Login = ({navigation}) => {
+
+    const [loading, setLoading] = useState(false);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -32,6 +43,8 @@ const Login = ({navigation}) => {
 
     // validate the user inputs when click on login button
     const onLogin = async () => {
+        setLoading(true);
+
         const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         if (!email) {
@@ -53,6 +66,7 @@ const Login = ({navigation}) => {
         else {
             await loginHandler()
         }
+        setLoading(false);
     };
 
     // logging the user if the inputs are valid
@@ -103,7 +117,7 @@ const Login = ({navigation}) => {
                                     setEmail(value)
                                 }}
                             />
-                            <Entypo style={GlobalStyles.inputIcon} name="mail" size={25}/>
+                            <Entypo style={GlobalStyles.inputIcon} name="mail" size={20}/>
                         </View>
                         <View style={[GlobalStyles.inputContainer, {marginBottom: 20}, GlobalStyles.shadow]}>
                             <TextInput
@@ -117,15 +131,19 @@ const Login = ({navigation}) => {
                                     setPassword(value)
                                 }}
                             />
-                            <Entypo style={GlobalStyles.inputIcon} name="key" size={25}/>
+                            <Entypo style={GlobalStyles.inputIcon} name="key" size={20}/>
                         </View>
                         <View style={GlobalStyles.row}>
-                            <PrimaryButton
-                                text={'התחברות'}
-                                width={'95%'}
-                                colors={LINEAR_GRADIENT_BLUE}
-                                onClick={onLogin}
-                            />
+                            {loading ?
+                                <ActivityIndicator style={{alignSelf: 'center', margin: 20}} color="#0047FF" size="large" />
+                                :
+                                <PrimaryButton
+                                    text={'התחברות'}
+                                    width={'95%'}
+                                    colors={LINEAR_GRADIENT_BLUE}
+                                    onClick={onLogin}
+                                />
+                            }
                         </View>
                         <View style={GlobalStyles.row}>
                             <PrimaryButton

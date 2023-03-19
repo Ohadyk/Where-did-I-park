@@ -11,7 +11,7 @@ const StableStateCard = () => {
             entering={SlideInRight.duration(700).delay(500)}
             exiting={SlideOutRight.duration(500).delay(0)}
         >
-            <Text style={styles.bodyTxt}>השאר את האפליקציה פתוחה כדי שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקומם</Text>
+            <Text style={styles.bodyTxt}>השאר/י את האפליקציה פתוחה על מנת לזהות חניות באופן אוטומטי ולשמור עבורך את מיקום הרכב</Text>
         </Animated.View>
     )
 };
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
 
     bodyTxt: {
-        textAlign: 'right',
+        textAlign: 'center',
         fontSize: 16,
         // color: '#898989',
         paddingVertical: 10,

@@ -22,6 +22,8 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
             if(updatedData.appState === 'stable') {
 
+                // ==========---------->>>    CONTINUE FROM HERE    <<<----------==========
+
             }
 
             await sleep(delay);

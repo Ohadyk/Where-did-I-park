@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import firestore from "@react-native-firebase/firestore";
-import { ActivityIndicator, Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";

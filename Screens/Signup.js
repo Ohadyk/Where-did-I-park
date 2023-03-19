@@ -7,7 +7,7 @@ import {
     Text,
     Keyboard,
     TouchableWithoutFeedback,
-    ScrollView, Alert,
+    ScrollView, Alert, ActivityIndicator,
 } from "react-native";
 import GlobalStyles from "../StyleSheet/GlobalStyle";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -19,6 +19,8 @@ import auth from '@react-native-firebase/auth';
 const { width, height } = Dimensions.get("screen");
 
 const Signup = ({navigation}) => {
+
+    const [loading, setLoading] = useState(false);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -35,6 +37,8 @@ const Signup = ({navigation}) => {
 
     // Validate the inputs when click on signup button
     const onSignup = async () => {
+        setLoading(true);
+
         const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         setEmailValidError('')
@@ -75,6 +79,7 @@ const Signup = ({navigation}) => {
                 await signupHandler()
             }
         }
+        setLoading(false);
     };
 
     // Creates the new user if the inputs are valid
@@ -129,7 +134,7 @@ const Signup = ({navigation}) => {
                                         setEmail(value);
                                     }}
                                 />
-                                <Entypo style={GlobalStyles.inputIcon} name='mail' size={25} />
+                                <Entypo style={GlobalStyles.inputIcon} name='mail' size={20} />
                             </View>
                             {emailValidError ? <Text style={GlobalStyles.inputErrorTxt}>{emailValidError}</Text> : null}
                         </View>
@@ -146,7 +151,7 @@ const Signup = ({navigation}) => {
                                         setPassword(value);
                                     }}
                                 />
-                                <Entypo style={GlobalStyles.inputIcon} name='key' size={25} />
+                                <Entypo style={GlobalStyles.inputIcon} name='key' size={20} />
                             </View>
                             <Text style={styles.inputTxt}>סיסמא באורך 6-12 תווים</Text>
                             {passwordValidError ? <Text style={GlobalStyles.inputErrorTxt}>{passwordValidError}</Text> : null}
@@ -164,19 +169,23 @@ const Signup = ({navigation}) => {
                                         setConfPassword(value);
                                     }}
                                 />
-                                <Entypo style={GlobalStyles.inputIcon} name='key' size={25} />
+                                <Entypo style={GlobalStyles.inputIcon} name='key' size={20} />
                             </View>
                             <Text style={styles.inputTxt}>סיסמא באורך 6-12 תווים</Text>
                             {confPasswordValidError ? <Text style={GlobalStyles.inputErrorTxt}>{confPasswordValidError}</Text> : null}
                         </View>
                         {serverError ? <Text style={GlobalStyles.inputErrorTxt}>שגיאה. אנא נסה שוב מאוחר יותר</Text> : null}
                         <View style={GlobalStyles.row}>
-                            <PrimaryButton
-                                text={'הרשם'}
-                                width={'95%'}
-                                colors={LINEAR_GRADIENT_BLUE}
-                                onClick={onSignup}
-                            />
+                            {loading ?
+                                <ActivityIndicator style={{alignSelf: 'center', margin: 20}} color="#0047FF" size="large" />
+                                :
+                                <PrimaryButton
+                                    text={'הרשם'}
+                                    width={'95%'}
+                                    colors={LINEAR_GRADIENT_BLUE}
+                                    onClick={onSignup}
+                                />
+                            }
                         </View>
                     </View>
                 </View>

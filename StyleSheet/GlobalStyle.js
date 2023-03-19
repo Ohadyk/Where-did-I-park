@@ -38,6 +38,7 @@ const GlobalStyles = StyleSheet.create({
     input: {
         width: '100%',
         textAlign: 'right',
+        paddingHorizontal: 15
     },
 
     inputIcon: {

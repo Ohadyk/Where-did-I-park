@@ -11,7 +11,7 @@ const LearningStateCard = () => {
             entering={SlideInRight.duration(700).delay(1000)}
             exiting={SlideOutRight.duration(500).delay(0)}
         >
-            <Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שנוכל בהמשך לזהות חניות באופן אוטומטי ושלמור עבורך את מיקומם</Text>
+            <Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שבעתיד האפליקציה תזהה חניות באופן אוטומטי ותשמור עבורך את מיקום הרכב</Text>
         </Animated.View>
     )
 };
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
 
     bodyTxt: {
-        textAlign: 'right',
+        textAlign: 'center',
         fontSize: 16,
         // color: '#898989',
         paddingVertical: 10,
