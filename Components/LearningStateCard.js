@@ -1,15 +1,15 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
-import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
+import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated";
 
 const LearningStateCard = () => {
 
     return(
         <Animated.View
             style={[styles.headerContainer, GlobalStyle.shadow]}
-            entering={SlideInRight.duration(700).delay(1000)}
-            exiting={SlideOutRight.duration(500).delay(0)}
+            entering={SlideInUp.duration(700).delay(1000)}
+            exiting={SlideOutUp.duration(500).delay(0)}
         >
             <Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שבעתיד האפליקציה תזהה חניות באופן אוטומטי ותשמור עבורך את מיקום הרכב</Text>
         </Animated.View>
