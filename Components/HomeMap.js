@@ -6,7 +6,7 @@ import { View } from "react-native";
 import CustomIcon from "../Components/CustomIcon";
 
 const HomeMap = () => {
-
+    
     const currentLocation = useSelector(state => state.data.currentLocation);
     const probablyParkingLocations = useSelector(state => state.data.learnedRides);
     const parkedVehicleLocation = useSelector(state => state.internalUsageData.parkedVehicleLocation);
@@ -15,7 +15,7 @@ const HomeMap = () => {
 
     useEffect(() => {
         if(mapRef.current) {
-            mapRef.current.animateToRegion(currentLocation);
+            mapRef.current.animateToRegion(currentLocation, 1000);
         }
     }, [currentLocation]);
 
@@ -26,6 +26,7 @@ const HomeMap = () => {
                 ref={mapRef}
                 region={currentLocation}
                 showsUserLocation={true}
+                followUserLocation={true}
                 showsMyLocationButton={false}
                 showsBuildings={true}
                 loadingEnabled={true}

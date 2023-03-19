@@ -61,7 +61,7 @@ const updateMovementInfo = async (info) => {
         longitudeDelta: 0.005
     };
     data.currentSpeed = info.coords.speed;
-    data.isOnRide = info.coords.speed > 15;
+    data.isOnRide = info.coords.speed > 7;
 };
 
 // updates the data in the async storage and returns the updated data

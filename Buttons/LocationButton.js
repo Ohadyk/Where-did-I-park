@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     locationButton: {
         position: 'absolute',
         bottom: 28,
-        right: 28,
+        left: 10,
         backgroundColor: 'white',
         width: 50,
         height: 50,
