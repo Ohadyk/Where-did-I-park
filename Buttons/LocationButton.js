@@ -1,15 +1,30 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useSelector } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import Geolocation from "react-native-geolocation-service";
 
 const LocationButton = (props) => {
 
-    const currentLocation = useSelector(state => state.data.currentLocation);
-
     const animateToLocation = () => {
-        props.mapRef.current.animateToRegion(currentLocation, 500);
+        Geolocation.getCurrentPosition(
+            (info) => {
+                const location = {
+                    latitude: info.coords.latitude,
+                    longitude: info.coords.longitude,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005
+                }
+
+                props.mapRef.current.animateToRegion(location, 500);
+            },
+            (error) => {
+                console.log(error);
+            },
+            {
+                enableHighAccuracy: true
+            }
+        );
     }
 
     return (
