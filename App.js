@@ -115,6 +115,7 @@ const App = () => {
                 }
                 setIsLoggedIn(true);
 
+                BackgroundService.stop().then(r => {});
                 BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
                 console.log('task start');
 

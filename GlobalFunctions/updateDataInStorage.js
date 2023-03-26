@@ -29,9 +29,15 @@ const updateAppState = async () => {
 
 // updates the battery and bluetooth params indicating if the user used them on ride
 const updateCurrentRideParams = async () => {
+    data.currentRide = {
+        chargedDuringTheRide: false,
+        usedBluetoothDuringTheRide: false
+    };
+
     if(data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
         data.currentRide.chargedDuringTheRide = true;
     }
+
     if(data.isOnRide && data.bluetoothConnected) {
         data.currentRide.usedBluetoothDuringTheRide = true;
     }
@@ -39,10 +45,9 @@ const updateCurrentRideParams = async () => {
 
 // updates the bluetooth state
 const updateBluetoothState = async () => {
-    const isEnabled = await RNBluetoothClassic.isBluetoothEnabled();
+    const bluetoothEnabled = await RNBluetoothClassic.isBluetoothEnabled();
 
-    data.bluetoothConnected = isEnabled;
-    console.log('isEnabled = ', isEnabled);
+    data.bluetoothConnected = bluetoothEnabled;
 };
 
 // updates the battery state
