@@ -1,6 +1,6 @@
 import Geolocation from "react-native-geolocation-service";
 import DeviceInfo from "react-native-device-info";
-import RNBluetoothClassic from 'react-native-bluetooth-classic';
+import RNBluetoothClassic from "react-native-bluetooth-classic";
 import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
 import updateUserBehavior from "./updateUserBehavior";
@@ -45,9 +45,7 @@ const updateCurrentRideParams = async () => {
 
 // updates the bluetooth state
 const updateBluetoothState = async () => {
-    const bluetoothEnabled = await RNBluetoothClassic.isBluetoothEnabled();
-
-    data.bluetoothConnected = bluetoothEnabled;
+    data.bluetoothConnected = await RNBluetoothClassic.isBluetoothEnabled();
 };
 
 // updates the battery state

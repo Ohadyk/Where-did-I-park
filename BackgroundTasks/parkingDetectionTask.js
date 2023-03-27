@@ -20,6 +20,7 @@ export const parkingDetectionTask = async (taskDataArguments) => {
         for(let i = 0; BackgroundService.isRunning(); i++) {
             const updatedData = await updateDataInStorage();
 
+            console.log('updatedData.appState = ', updatedData.appState);
             if(updatedData.appState === 'stable') {
 
                 // ==========---------->>>    CONTINUE FROM HERE    <<<----------==========

@@ -16,6 +16,7 @@ const IParkedButton = () => {
 
     const [loading, setLoading] = useState(false);
 
+    const appState = useSelector(state => state.data.appState);
     const isOnRide = useSelector(state => state.data.isOnRide);
     const learnedRides = useSelector(state => state.data.learnedRides);
     const numOfLearnedRides = useSelector(state => state.data.numOfLearnedRides);
@@ -24,7 +25,8 @@ const IParkedButton = () => {
 
     const dispatch = useDispatch();
 
-    // updates the learned ride data in firestore, storage and redux
+    /* updates the learned ride data in firestore, storage and redux
+       and saves the current location as the parking location */
     const updateLearnedRideData = async () => {
         try {
             let rides = [...learnedRides];
@@ -42,6 +44,7 @@ const IParkedButton = () => {
             const userData = {
                 learnedRides: firestore.FieldValue.arrayUnion(ride),
                 numOfLearnedRides: firestore.FieldValue.increment(1),
+                parkedVehicleLocation: ride.parkingLocation
             }
             await updateDataInFirestore(userData);
 
@@ -50,13 +53,18 @@ const IParkedButton = () => {
                 numOfLearnedRides: numOfLearnedRides+1
             };
 
-            const learnedRidesForTask = {
-                updatedLearnedRides: rides
+            const internalData = {
+                updatedLearnedRides: rides,
+                parkedVehicleLocation: {
+                    latitude: currentLocation.latitude,
+                    longitude: currentLocation.longitude,
+                }
             };
 
             await writeDataToStorage('data', persistData, true);
-            await writeDataToStorage('internalUsageData', learnedRidesForTask, true);
+            await writeDataToStorage('internalUsageData', internalData, true);
 
+            dispatch(internalUsageDataActions.setParkedVehicleLocation(internalData.parkedVehicleLocation));
             dispatch(dataActions.addLearnedRide(ride));
         }
         catch (error) {
@@ -75,7 +83,10 @@ const IParkedButton = () => {
             }
             await updateDataInFirestore(userData);
 
+            const numOfLearnedRides = {numOfLearnedRides: 0};
             const wantedAppState = {wantedAppState: 'stable'};
+
+            await writeDataToStorage('data', numOfLearnedRides, true);
             await writeDataToStorage('internalUsageData', wantedAppState, true);
 
             dispatch(dataActions.resetLearnedRides());
@@ -86,27 +97,15 @@ const IParkedButton = () => {
         }
     };
 
-    // saves the parked vehicle location in async storage and update redux
-    const setParkingLocation = async () => {
-        const parkingLocation = {
-            parkedVehicleLocation: {
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude,
-            }
-        };
-        await writeDataToStorage('internalUsageData', parkingLocation, true);
-
-        dispatch(internalUsageDataActions.setParkedVehicleLocation(parkingLocation.parkedVehicleLocation));
-    };
-
     // handles the parking event. saves the location and checks heuristics
     const parkingHandler = async () => {
         setLoading(true);
 
-        // save the current location as the parking location
-        await setParkingLocation();
+        if (appState === 'stable') {
+            return;
+        }
 
-        // save the current ride params for heuristics
+        // saves the current location as the parking location and ride params for heuristics
         await updateLearnedRideData();
 
         // app finished learn the user behavior, switch to stable state

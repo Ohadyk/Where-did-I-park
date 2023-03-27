@@ -65,6 +65,7 @@ const App = () => {
         if(persistData !== null) {
             dispatch(dataActions.setAppState(persistData.appState));
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
+            dispatch(dataActions.setNumOfLearnedRides(persistData.numOfLearnedRides));
             dispatch(dataActions.setCurrentSpeed(persistData.currentSpeed));
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
             dispatch(dataActions.setBatteryState(persistData.batteryState));
@@ -84,7 +85,7 @@ const App = () => {
             if (user) {
                 const userData = await getFirestoreUserData();
 
-                // init user data in async storage and redux
+                // init user data in storage
                 if (userData !== null) {
 
                     initialPersistData.appState = userData.appState;
@@ -93,18 +94,20 @@ const App = () => {
                     const initialDataValue = JSON.stringify(initialPersistData);
 
                     internalUsageData.wantedAppState = userData.appState;
+                    internalUsageData.parkedVehicleLocation = userData.parkedVehicleLocation;
                     const internalDataValue = JSON.stringify(internalUsageData);
 
                     await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
                 }
-                // init new user doc in database and data in async storage
+                // init new user doc in database and data in storage
                 else {
                     const initialUserData = {
                         appState: 'learning',
                         userConnectingToCharger: false,
                         userConnectingToBluetooth: false,
                         numOfLearnedRides: 0,
-                        learnedRides: []
+                        learnedRides: [],
+                        parkedVehicleLocation: null
                     }
                     await setDataDocInFirestore(initialUserData);
 
