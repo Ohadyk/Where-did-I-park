@@ -47,6 +47,9 @@ const App = () => {
         batteryState: 'unplugged',
         bluetoothConnected: false,
         currentRide: {
+            finishedRide: false,
+            chargerDisconnected: false,
+            bluetoothDisconnected: false,
             chargedDuringTheRide: false,
             usedBluetoothDuringTheRide: false
         }
@@ -54,7 +57,8 @@ const App = () => {
 
     const internalUsageData = {
         wantedAppState: 'learning',
-        parkedVehicleLocation: null
+        parkedVehicleLocation: null,
+        probablyParkingLocations: []
     }
 
     // updates the redux with persist data from async storage for update the UI
@@ -74,6 +78,7 @@ const App = () => {
         if(internalData !== null) {
             dispatch(internalUsageDataActions.setWantedAppState(internalData.wantedAppState));
             dispatch(internalUsageDataActions.setParkedVehicleLocation(internalData.parkedVehicleLocation));
+            dispatch(internalUsageDataActions.setProbablyParkingLocations(internalData.probablyParkingLocations));
         }
     };
 
@@ -88,6 +93,8 @@ const App = () => {
                 // init user data in storage
                 if (userData !== null) {
 
+                    initialPersistData.userConnectingToCharger = userData.userConnectingToCharger;
+                    initialPersistData.userConnectingToBluetooth = userData.userConnectingToBluetooth;
                     initialPersistData.appState = userData.appState;
                     initialPersistData.learnedRides = userData.learnedRides;
                     initialPersistData.numOfLearnedRides = userData.numOfLearnedRides;

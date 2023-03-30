@@ -19,6 +19,9 @@ const dataSlice = createSlice({
         batteryState: 'unplugged',
         bluetoothConnected: false,
         currentRide: {
+            finishedRide: false,
+            chargerDisconnected: false,
+            bluetoothDisconnected: false,
             chargedDuringTheRide: false,
             usedBluetoothDuringTheRide: false
         },

@@ -12,7 +12,7 @@ const CustomDrawer = (props) => {
                 <View style={{ flex: 1, paddingTop: 10, margin: 5 }}>
                     <DrawerItemList {...props} />
                     <DrawerItem
-                        labelStyle={{fontSize: 16}}
+                        labelStyle={{fontSize: 16, color: 'red'}}
                         label={'יציאה'}
                         icon={() => <Ionicons name='log-out-outline' size={25} />}
                         onPress={async () => {

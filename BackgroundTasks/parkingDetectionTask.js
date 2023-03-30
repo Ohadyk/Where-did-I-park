@@ -1,6 +1,10 @@
 import BackgroundService from "react-native-background-actions";
 import { Alert, PermissionsAndroid } from "react-native";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
+import detectParking from "../GlobalFunctions/detectParkings";
+import updateDataInFirestore from "../GlobalFunctions/updateDataInFirestore";
+import writeDataToStorage from "../GlobalFunctions/writeDataToStorage";
+import addProbablyParkingLocation from "../GlobalFunctions/addProbablyParkingLocation";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -11,22 +15,48 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
         const userPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
 
-        if(userPermissions === 'denied') {
+        if (userPermissions === 'denied') {
             console.log('location permissions denied');
             Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד");
             BackgroundService.stop().then(r => {});
         }
 
-        for(let i = 0; BackgroundService.isRunning(); i++) {
-            const updatedData = await updateDataInStorage();
+        let previousData = taskDataArguments.initialData;
+        let updatedData = {
+            currentLocation: {},
+            learnedRides: [],
+            currentRide: {},
+            probablyParkingLocations: []
+        };
 
-            console.log('updatedData.appState = ', updatedData.appState);
-            if(updatedData.appState === 'stable') {
+        for (let i = 0; BackgroundService.isRunning(); i++) {
+            await updateDataInStorage(updatedData, previousData);
 
-                // ==========---------->>>    CONTINUE FROM HERE    <<<----------==========
+            // try to detect the parking moment
+            if (updatedData.appState === 'stable') {
 
+                const userParked = await detectParking(updatedData);
+
+                // saves the parking location in storage
+                if (userParked) {
+                    const parkingData = {
+                        date: Date.now(),
+                        parkedVehicleLocation: {
+                            latitude: updatedData.currentLocation.latitude,
+                            longitude: updatedData.currentLocation.longitude
+                        }
+                    };
+
+                    await addProbablyParkingLocation(updatedData.probablyParkingLocations, parkingData);
+                }
             }
 
+            // console.log('previous.isOnRide = ', previousData.isOnRide);
+            // console.log('data.isOnRide = ', updatedData.isOnRide);
+            // console.log('------------------------------------------');
+
+            previousData.isOnRide = updatedData.isOnRide;
+            previousData.currentRide = updatedData.currentRide;
             await sleep(delay);
         }
 

@@ -45,12 +45,16 @@ const IParkedButton = () => {
                 learnedRides: firestore.FieldValue.arrayUnion(ride),
                 numOfLearnedRides: firestore.FieldValue.increment(1),
                 parkedVehicleLocation: ride.parkingLocation
-            }
+            };
             await updateDataInFirestore(userData);
 
             const persistData = {
                 learnedRides: rides,
-                numOfLearnedRides: numOfLearnedRides+1
+                numOfLearnedRides: numOfLearnedRides+1,
+                currentRide: {
+                    chargedDuringTheRide: false,
+                    usedBluetoothDuringTheRide: false
+                }
             };
 
             const internalData = {
