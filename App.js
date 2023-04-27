@@ -117,7 +117,8 @@ const App = () => {
                         userConnectingToBluetooth: false,
                         numOfLearnedRides: 0,
                         learnedRides: [],
-                        parkedVehicleLocation: null
+                        parkedVehicleLocation: null,
+                        wrongDetectedParking: 0
                     }
                     await setDataDocInFirestore(initialUserData);
 

@@ -10,6 +10,8 @@ import store from "./store";
 import PushNotification, { Importance } from "react-native-push-notification";
 import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 import updateDataInFirestore from "./GlobalFunctions/updateDataInFirestore";
+import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
+import firestore from "@react-native-firebase/firestore";
 
 PushNotification.createChannel(
     {
@@ -49,9 +51,26 @@ PushNotification.configure({
         }
         // the user did not park his car
         else if(action.action === 'לא חניתי') {
-            // console.log('userInfo = ', action.userInfo)
+            const internalUsageData = await readDataFromStorage('internalUsageData');
 
+            if(internalUsageData.wrongDetectedParking + 1 >= 5) {
+                const wrongDetectedParking = {
+                    wrongDetectedParking: internalUsageData.wrongDetectedParking + 1,
+                    wantedAppState: 'learning'
+                };
+                await writeDataToStorage('internalUsageData', wrongDetectedParking, true);
+            }
+            else {
+                const wrongDetectedParking = {
+                    wrongDetectedParking: internalUsageData.wrongDetectedParking + 1
+                };
+                await writeDataToStorage('internalUsageData', wrongDetectedParking, true);
+            }
 
+            const userData = {
+                wrongDetectedParking: firestore.FieldValue.increment(1)
+            };
+            await updateDataInFirestore(userData);
         }
 
     }
