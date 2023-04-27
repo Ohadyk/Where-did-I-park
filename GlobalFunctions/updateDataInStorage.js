@@ -51,10 +51,10 @@ const updateCurrentRideParams = async (data, previousData) => {
 
     // data.currentRide = previousData.currentRide;
 
-    console.log('--------------------------------------------------');
-    console.log('\tprevious = ', previousData.isOnRide);
-    console.log('\tdata = ', data.isOnRide);
-    console.log('--------------------------------------------------');
+    // console.log('--------------------------------------------------');
+    // console.log('\tprevious = ', previousData.isOnRide);
+    // console.log('\tdata = ', data.isOnRide);
+    // console.log('--------------------------------------------------');
 
     // user charged during the ride and unplugged the charger
     if (previousData.currentRide.chargedDuringTheRide && data.batteryState === 'unplugged') {
@@ -114,7 +114,7 @@ const updateMovementInfo = async (data, info) => {
     };
     data.currentSpeed = info.coords.speed;
     data.isOnRide = info.coords.speed >= 35;
-    console.log('currentSpeed = ', data.currentSpeed);
+    // console.log('currentSpeed = ', data.currentSpeed);   // ---------------------------------------------
 };
 
 // updates the data in the async storage and returns the updated data

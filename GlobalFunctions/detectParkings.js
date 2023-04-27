@@ -1,8 +1,9 @@
+import askParkingNotification from "./askParkingNotification";
 
 // Trying to detect the user's parking moment. If so saves the location
 const detectParking = async (currentData) => {
 
-    console.log('finishedRide = ', currentData.currentRide.finishedRide);
+    // console.log('finishedRide = ', currentData.currentRide.finishedRide);
 
     // the user may have finished the ride
     if (currentData.currentRide.finishedRide) {
@@ -29,6 +30,7 @@ const detectParking = async (currentData) => {
         return true;
     }
 
+    await askParkingNotification(currentData.currentLocation);
     return false;
 };
 

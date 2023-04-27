@@ -19,8 +19,6 @@ const HomeMap = () => {
     const probablyParkingLocations = useSelector(state => state.internalUsageData.probablyParkingLocations);
     const parkedVehicleLocation = useSelector(state => state.internalUsageData.parkedVehicleLocation);
 
-    console.log('probablyParkingLocations = ', probablyParkingLocations);
-
     const mapRef = useRef(null);
 
     const setWatchPosition = () => {
@@ -67,7 +65,8 @@ const HomeMap = () => {
                 showsBuildings={true}
                 loadingEnabled={true}
             >
-                {(appState === 'learning') && parkedVehicleLocation &&
+                {/*{(appState === 'learning') && parkedVehicleLocation &&*/}
+                {parkedVehicleLocation &&
                     <Marker coordinate={{ latitude: parkedVehicleLocation.latitude, longitude: parkedVehicleLocation.longitude }}>
                         <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 2 }}>
                             <CustomIcon name='parking-icon' size={45} color="#0047FF" />
