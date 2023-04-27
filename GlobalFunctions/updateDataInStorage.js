@@ -4,8 +4,9 @@ import RNBluetoothClassic from "react-native-bluetooth-classic";
 import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
 import updateUserBehavior from "./updateUserBehavior";
+import updateDataInFirestore from "./updateDataInFirestore";
 
-// read the wanted app state from async storage and sets the needed app state
+// read the wanted app state from async storage and sets the needed app state. updates in firestore and async storage
 const updateAppState = async (data) => {
     const persistData = await readDataFromStorage('data');
     const internalUsageData = await readDataFromStorage('internalUsageData');
@@ -19,15 +20,32 @@ const updateAppState = async (data) => {
     if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'stable') {
         data.appState = 'stable';
         await updateUserBehavior(internalUsageData);
+
+        const userData = {
+            appState: 'stable',
+            learnedRides: [],
+            numOfLearnedRides: 0,
+            wrongDetectedParking: 0
+        }
+        await updateDataInFirestore(userData);
     }
     // change to learning state
     else if(persistData.appState === 'stable' && internalUsageData.wantedAppState === 'learning') {
         data.appState = 'learning';
         data.probablyParkingLocations = [];
+        data.wrongDetectedParking = 0;
 
         const internalData = {
-            probablyParkingLocations: []
+            probablyParkingLocations: [],
+            wrongDetectedParking: 0
         };
+        const userData = {
+            appState: 'learning',
+            learnedRides: [],
+            numOfLearnedRides: 0,
+            wrongDetectedParking: 0
+        }
+        await updateDataInFirestore(userData);
         await writeDataToStorage('internalUsageData', internalData, true);
     }
     // stay in learning state

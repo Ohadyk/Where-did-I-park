@@ -5,7 +5,8 @@ const internalUsageDataSlice = createSlice({
     initialState: {
         wantedAppState: 'learning',
         parkedVehicleLocation: null,
-        probablyParkingLocations: []
+        probablyParkingLocations: [],
+        wrongDetectedParking: 0
     },
 
     reducers: {
@@ -19,6 +20,10 @@ const internalUsageDataSlice = createSlice({
 
         setProbablyParkingLocations(state, action) {
             state.probablyParkingLocations = action.payload
+        },
+
+        setWrongDetectedParking(state, action) {
+            state.wrongDetectedParking = action.payload
         }
 
     }

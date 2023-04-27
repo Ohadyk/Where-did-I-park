@@ -58,7 +58,8 @@ const App = () => {
     const internalUsageData = {
         wantedAppState: 'learning',
         parkedVehicleLocation: null,
-        probablyParkingLocations: []
+        probablyParkingLocations: [],
+        wrongDetectedParking: 0
     }
 
     // updates the redux with persist data from async storage for update the UI
@@ -79,6 +80,7 @@ const App = () => {
             dispatch(internalUsageDataActions.setWantedAppState(internalData.wantedAppState));
             dispatch(internalUsageDataActions.setParkedVehicleLocation(internalData.parkedVehicleLocation));
             dispatch(internalUsageDataActions.setProbablyParkingLocations(internalData.probablyParkingLocations));
+            dispatch(internalUsageDataActions.setWrongDetectedParking(internalData.wrongDetectedParking));
         }
     };
 
@@ -102,6 +104,7 @@ const App = () => {
 
                     internalUsageData.wantedAppState = userData.appState;
                     internalUsageData.parkedVehicleLocation = userData.parkedVehicleLocation;
+                    internalUsageData.wrongDetectedParking = userData.wrongDetectedParking;
                     const internalDataValue = JSON.stringify(internalUsageData);
 
                     await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
