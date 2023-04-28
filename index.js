@@ -42,17 +42,22 @@ PushNotification.configure({
 
         // the user parked his car
         if(action.action === 'חניתי') {
+            const userData = {
+                parkedVehicleLocation: userLocation
+            };
             const parkedLocation = {
+                probablyParkingLocations: [],
                 parkedVehicleLocation: userLocation
             };
 
-            await updateDataInFirestore(parkedLocation);
+            await updateDataInFirestore(userData);
             await writeDataToStorage('internalUsageData', parkedLocation, true);
         }
         // the user did not park his car
         else if(action.action === 'לא חניתי') {
             const internalUsageData = await readDataFromStorage('internalUsageData');
 
+            // switch to learning state to update user behavior
             if(internalUsageData.wrongDetectedParking + 1 >= 5) {
                 const wrongDetectedParking = {
                     wrongDetectedParking: internalUsageData.wrongDetectedParking + 1,
@@ -60,6 +65,7 @@ PushNotification.configure({
                 };
                 await writeDataToStorage('internalUsageData', wrongDetectedParking, true);
             }
+            // stay in stable state
             else {
                 const wrongDetectedParking = {
                     wrongDetectedParking: internalUsageData.wrongDetectedParking + 1
