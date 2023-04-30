@@ -14,6 +14,7 @@ const detectParking = async (currentData) => {
             // the user disconnected the charger
             if (currentData.currentRide.chargerDisconnected) {
                 console.log('charger disconnected');
+                await askParkingNotification(currentData.currentLocation);
                 return true;
             }
         }
@@ -23,6 +24,7 @@ const detectParking = async (currentData) => {
             // the user disconnected the bluetooth
             if (currentData.currentRide.bluetoothDisconnected) {
                 console.log('bluetooth disconnected');
+                await askParkingNotification(currentData.currentLocation);
                 return true;
             }
         }
@@ -30,7 +32,6 @@ const detectParking = async (currentData) => {
         return true;
     }
 
-    await askParkingNotification(currentData.currentLocation);
     return false;
 };
 

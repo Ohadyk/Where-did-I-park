@@ -1,10 +1,11 @@
 import Geolocation from "react-native-geolocation-service";
 import DeviceInfo from "react-native-device-info";
-import RNBluetoothClassic from "react-native-bluetooth-classic";
 import writeDataToStorage from "./writeDataToStorage";
 import readDataFromStorage from "./readDataFromStorage";
 import updateUserBehavior from "./updateUserBehavior";
 import updateDataInFirestore from "./updateDataInFirestore";
+import BleManager from "react-native-ble-manager";
+import RNBluetoothClassic from "react-native-bluetooth-classic";
 
 // read the wanted app state from async storage and sets the needed app state. updates in firestore and async storage
 const updateAppState = async (data) => {
@@ -113,6 +114,43 @@ const updateCurrentRideParams = async (data, previousData) => {
 // updates the bluetooth state
 const updateBluetoothState = async (data) => {
     data.bluetoothConnected = await RNBluetoothClassic.isBluetoothEnabled();
+
+    // BleManager.getBondedPeripherals([]).then((bondedPeripheralsArray) => {
+    //     // Each peripheral in returned array will have id and name properties
+    //     console.log("Bonded peripherals: " + bondedPeripheralsArray.length);
+    //
+    //     bondedPeripheralsArray.forEach(peripheral => {
+    //
+    //         console.log('peripheral.id = ', peripheral.id)
+    //
+    //         BleManager.isPeripheralConnected(
+    //             peripheral.id,
+    //             []
+    //
+    //         ).then(isConnected => {
+    //             if (isConnected) {
+    //                 console.log("Peripheral is connected!");
+    //
+    //             } else {
+    //                 console.log("Peripheral is NOT connected!");
+    //             }
+    //         });
+    //     });
+    // });
+
+    // BleManager.getConnectedPeripherals([]).then((peripheralsArray) => {
+    //     if (peripheralsArray.length > 0) {
+    //         console.log('Device is connected to a Bluetooth device.');
+    //         console.log('peripheralsArray = ', peripheralsArray);
+    //     } else {
+    //         console.log('Device is not connected to a Bluetooth device.');
+    //         console.log('peripheralsArray = ', peripheralsArray);
+    //     }
+    //
+    // }).catch((error) => {
+    //     console.log('Error:', error);
+    // });
+
 };
 
 // updates the battery state
@@ -136,7 +174,7 @@ const updateMovementInfo = async (data, info) => {
 };
 
 // updates the data in the async storage and returns the updated data
-const updateDataInStorage = async (data, previousData) => {
+const updateDataInStorage = async (data, previousData, bleManager) => {
 
     await Geolocation.getCurrentPosition(
         async (info) => {

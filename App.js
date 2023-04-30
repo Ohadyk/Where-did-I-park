@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "react-native";
+import { Alert, PermissionsAndroid, StatusBar } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -128,6 +128,27 @@ const App = () => {
                     await writeMultiToStorage([['data', initialDataValue], ['internalUsageData', internalDataValue]]);
                 }
                 setIsLoggedIn(true);
+
+                const locationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+                if (locationPermissions === 'denied') {
+                    console.log('location permissions denied');
+                    Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד");
+                    return;
+                }
+
+                const bleScanPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);
+                if (bleScanPermissions === 'denied') {
+                    console.log('bluetooth permissions denied');
+                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד");
+                    return;
+                }
+
+                const bleConnectPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
+                if (bleConnectPermissions === 'denied') {
+                    console.log('bluetooth permissions denied');
+                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד");
+                    return;
+                }
 
                 BackgroundService.stop().then(r => {});
                 BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
