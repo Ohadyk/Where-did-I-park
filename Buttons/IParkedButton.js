@@ -80,14 +80,6 @@ const IParkedButton = () => {
     // changes the app state to stable state. updates database and async storage
     const setStableAppState = async () => {
         try {
-            // const userData = {
-            //     appState: 'stable',
-            //     learnedRides: [],
-            //     numOfLearnedRides: 0,
-            //     wrongDetectedParking: 0
-            // }
-            // await updateDataInFirestore(userData);
-
             const numOfLearnedRides = {numOfLearnedRides: 0};
             const wantedAppState = {wantedAppState: 'stable'};
 

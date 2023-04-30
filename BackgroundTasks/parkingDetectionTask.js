@@ -1,11 +1,7 @@
 import BackgroundService from "react-native-background-actions";
-import { Alert, PermissionsAndroid } from "react-native";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
 import detectParking from "../GlobalFunctions/detectParkings";
-import updateDataInFirestore from "../GlobalFunctions/updateDataInFirestore";
-import writeDataToStorage from "../GlobalFunctions/writeDataToStorage";
 import addProbablyParkingLocation from "../GlobalFunctions/addProbablyParkingLocation";
-import BleManager from "react-native-ble-manager";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -14,14 +10,6 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
     await new Promise( async (resolve) => {
 
-        // const locationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        //
-        // if (locationPermissions === 'denied') {
-        //     console.log('location permissions denied');
-        //     Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד");
-        //     BackgroundService.stop().then(r => {});
-        // }
-
         let previousData = taskDataArguments.initialData;
         let updatedData = {
             currentLocation: {},
@@ -29,10 +17,6 @@ export const parkingDetectionTask = async (taskDataArguments) => {
             currentRide: {},
             probablyParkingLocations: []
         };
-
-        BleManager.start({ showAlert: false }).then(() => {
-            console.log("BleManager Module initialized");
-        });
 
         for (let i = 0; BackgroundService.isRunning(); i++) {
             await updateDataInStorage(updatedData, previousData);

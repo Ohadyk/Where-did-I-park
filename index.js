@@ -12,6 +12,7 @@ import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 import updateDataInFirestore from "./GlobalFunctions/updateDataInFirestore";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import firestore from "@react-native-firebase/firestore";
+import BleManager from "react-native-ble-manager";
 
 PushNotification.createChannel(
     {
@@ -81,6 +82,10 @@ PushNotification.configure({
 
     }
 
+});
+
+BleManager.start({ showAlert: false }).then(() => {
+    console.log("BleManager Module initialized");
 });
 
 const AppRedux = () => (
