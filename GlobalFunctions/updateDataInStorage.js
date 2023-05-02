@@ -20,10 +20,13 @@ const updateAppState = async (data) => {
     // change to stable state
     if(persistData.appState === 'learning' && internalUsageData.wantedAppState === 'stable') {
         data.appState = 'stable';
-        await updateUserBehavior(internalUsageData);
+
+        const userBehavior = await updateUserBehavior(internalUsageData);
 
         const userData = {
             appState: 'stable',
+            userConnectingToCharger: userBehavior.userConnectingToCharger,
+            userConnectingToBluetooth: userBehavior.userConnectingToBluetooth,
             learnedRides: [],
             numOfLearnedRides: 0,
             wrongDetectedParking: 0
@@ -55,7 +58,8 @@ const updateAppState = async (data) => {
         data.probablyParkingLocations = [];
 
         const internalData = {
-            probablyParkingLocations: []
+            probablyParkingLocations: [],
+            wrongDetectedParking: 0
         };
         await writeDataToStorage('internalUsageData', internalData, true);
     }
@@ -101,10 +105,14 @@ const updateCurrentRideParams = async (data, previousData) => {
         data.currentRide.finishedRide = false;
     }
 
+    console.log('data = ', data)    // ------------------------------------------------------------------------
+
+    // the user is on ride and also charging the phone
     if (data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
         data.currentRide.chargedDuringTheRide = true;
     }
 
+    // the user is on ride and also using bluetooth
     if (data.isOnRide && data.bluetoothConnected) {
         data.currentRide.usedBluetoothDuringTheRide = true;
     }
@@ -169,8 +177,7 @@ const updateMovementInfo = async (data, info) => {
         longitudeDelta: 0.005
     };
     data.currentSpeed = info.coords.speed;
-    data.isOnRide = info.coords.speed >= 35;
-    // console.log('currentSpeed = ', data.currentSpeed);   // ---------------------------------------------
+    data.isOnRide = info.coords.speed >= 7;
 };
 
 // updates the data in the async storage and returns the updated data

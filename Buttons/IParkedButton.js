@@ -41,6 +41,8 @@ const IParkedButton = () => {
             };
             rides.push(ride);
 
+            console.log('----- currentRide = ', currentRide);   // ---------------------------------------------------
+
             const userData = {
                 learnedRides: firestore.FieldValue.arrayUnion(ride),
                 numOfLearnedRides: firestore.FieldValue.increment(1),
@@ -69,7 +71,7 @@ const IParkedButton = () => {
             await writeDataToStorage('internalUsageData', internalData, true);
 
             dispatch(internalUsageDataActions.setParkedVehicleLocation(internalData.parkedVehicleLocation));
-            dispatch(dataActions.addLearnedRide(ride));
+            dispatch(dataActions.setLearnedRides(rides));
         }
         catch (error) {
             console.log(error);

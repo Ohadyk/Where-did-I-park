@@ -56,10 +56,6 @@ const dataSlice = createSlice({
             state.learnedRides = action.payload
         },
 
-        addLearnedRide(state, action) {
-            state.learnedRides.push(action.payload)
-        },
-
         resetLearnedRides(state, action) {
             state.learnedRides = []
         },
@@ -82,6 +78,10 @@ const dataSlice = createSlice({
 
         setBluetoothConnected(state, action) {
             state.bluetoothConnected = action.payload
+        },
+
+        setCurrentRide(state, action) {
+            state.currentRide = action.payload
         },
 
         setChargedDuringTheRide(state, action) {

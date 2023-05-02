@@ -1,6 +1,7 @@
 import updateDataInFirestore from "./updateDataInFirestore";
 import writeDataToStorage from "./writeDataToStorage";
 
+// Updates the user's usage behavior while on rides
 const updateUserBehavior = async (internalUsageData) => {
     try {
         const userBehavior = {
@@ -27,8 +28,10 @@ const updateUserBehavior = async (internalUsageData) => {
             userBehavior.userConnectingToBluetooth = true;
         }
 
-        await updateDataInFirestore(userBehavior);
+        // await updateDataInFirestore(userBehavior);
         await writeDataToStorage('data', userBehavior, true);
+
+        return userBehavior;
     }
     catch (error) {
         console.log(error);

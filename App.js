@@ -75,6 +75,7 @@ const App = () => {
             dispatch(dataActions.setIsOnRide(persistData.isOnRide));
             dispatch(dataActions.setBatteryState(persistData.batteryState));
             dispatch(dataActions.setBluetoothConnected(persistData.bluetoothConnected));
+            dispatch(dataActions.setCurrentRide(persistData.currentRide));
         }
         if(internalData !== null) {
             dispatch(internalUsageDataActions.setWantedAppState(internalData.wantedAppState));
