@@ -2,6 +2,11 @@ import BackgroundService from "react-native-background-actions";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
 import detectParking from "../GlobalFunctions/detectParkings";
 import addProbablyParkingLocation from "../GlobalFunctions/addProbablyParkingLocation";
+import askParkingNotification from "../GlobalFunctions/askParkingNotification";
+import updateDataInFirestore from "../GlobalFunctions/updateDataInFirestore";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import readDataFromStorage from "../GlobalFunctions/readDataFromStorage";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -10,16 +15,25 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
     await new Promise( async (resolve) => {
 
-        let previousData = taskDataArguments.initialData;
+        // let previousData = taskDataArguments.initialData;
         let updatedData = {
-            currentLocation: {},
-            learnedRides: [],
-            currentRide: {},
+            isOnRide: false,
+            currentRide: {
+                finishedRide: false,
+                chargerDisconnected: false,
+                bluetoothDisconnected: false,
+                chargedDuringTheRide: false,
+                usedBluetoothDuringTheRide: false
+            },
             probablyParkingLocations: []
         };
 
         for (let i = 0; BackgroundService.isRunning(); i++) {
-            await updateDataInStorage(updatedData, previousData);
+            await updateDataInStorage(updatedData);
+
+            // console.log('i = ', i);
+            // const storageData = await readDataFromStorage('data');
+            // console.log('storageData.isOnRide = ', storageData.isOnRide);
 
             // try to detect the parking moment
             if (updatedData.appState === 'stable') {
@@ -40,12 +54,6 @@ export const parkingDetectionTask = async (taskDataArguments) => {
                 }
             }
 
-            // console.log('previous.isOnRide = ', previousData.isOnRide);
-            // console.log('data.isOnRide = ', updatedData.isOnRide);
-            // console.log('------------------------------------------');
-
-            previousData.isOnRide = updatedData.isOnRide;
-            previousData.currentRide = updatedData.currentRide;
             await sleep(delay);
         }
 

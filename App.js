@@ -19,6 +19,7 @@ import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
 import { internalUsageDataActions } from "./store/internalUsageDataSlice";
+import backgroundServer from "react-native-background-actions";
 
 const Stack = createNativeStackNavigator();
 
@@ -151,9 +152,11 @@ const App = () => {
                     return;
                 }
 
-                BackgroundService.stop().then(r => {});
-                BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-                console.log('task start');
+                if (!BackgroundService.isRunning()) {
+                    BackgroundService.stop().then(r => {});
+                    BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                    console.log('task start');
+                }
 
                 if(!updateReduxIntervalRef.current) {
                     updateReduxIntervalRef.current = setInterval(updateDataInRedux, 5000);

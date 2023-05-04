@@ -12,7 +12,6 @@ import writeDataToStorage from "./GlobalFunctions/writeDataToStorage";
 import updateDataInFirestore from "./GlobalFunctions/updateDataInFirestore";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import firestore from "@react-native-firebase/firestore";
-import BleManager from "react-native-ble-manager";
 
 PushNotification.createChannel(
     {
@@ -61,7 +60,6 @@ PushNotification.configure({
             // switch to learning state to update user behavior
             if(internalUsageData.wrongDetectedParking + 1 >= 5) {
                 const wrongDetectedParking = {
-                    wrongDetectedParking: internalUsageData.wrongDetectedParking + 1,
                     wantedAppState: 'learning'
                 };
                 await writeDataToStorage('internalUsageData', wrongDetectedParking, true);
@@ -82,10 +80,6 @@ PushNotification.configure({
 
     }
 
-});
-
-BleManager.start({ showAlert: false }).then(() => {
-    console.log("BleManager Module initialized");
 });
 
 const AppRedux = () => (

@@ -72,49 +72,40 @@ const updateAppState = async (data) => {
 // updates the battery and bluetooth params indicating if the user used them on ride
 const updateCurrentRideParams = async (data, previousData) => {
 
-    // data.currentRide = previousData.currentRide;
-
-    // console.log('--------------------------------------------------');
-    // console.log('\tprevious = ', previousData.isOnRide);
-    // console.log('\tdata = ', data.isOnRide);
-    // console.log('--------------------------------------------------');
-
-    // user charged during the ride and unplugged the charger
-    if (previousData.currentRide.chargedDuringTheRide && data.batteryState === 'unplugged') {
-        data.currentRide.chargerDisconnected = true;
-    }
-    // user used bluetooth during the ride and disconnected it
-    if (previousData.currentRide.usedBluetoothDuringTheRide && !data.bluetoothConnected) {
-        data.currentRide.bluetoothDisconnected = true;
-    }
-
     // user speed has dropped drastically
     if (previousData.isOnRide && !data.isOnRide) {
         data.currentRide.finishedRide = true;
     }
-    // the user may have started ride - reset all the params of current ride
-    else if (!previousData.isOnRide && data.isOnRide) {
+
+    if (data.isOnRide) {
+        // the user is on ride and also charging the phone
+        if (data.batteryState === 'charging' || data.batteryState === 'full') {
+            data.currentRide.chargedDuringTheRide = true;
+        }
+        // the user is on ride and also using bluetooth
+        if (data.bluetoothConnected) {
+            data.currentRide.usedBluetoothDuringTheRide = true;
+        }
+    }
+
+    // user charged during the ride and unplugged the charger
+    if (data.currentRide.finishedRide &&
+            data.currentRide.chargedDuringTheRide && data.batteryState === 'unplugged') {
+        data.currentRide.chargerDisconnected = true;
+    }
+    // user used bluetooth during the ride and disconnected it
+    if (data.currentRide.finishedRide &&
+            data.currentRide.usedBluetoothDuringTheRide && !data.bluetoothConnected) {
+        data.currentRide.bluetoothDisconnected = true;
+    }
+
+    // the user may have started a ride - reset all the params of current ride
+    if (!previousData.isOnRide && data.isOnRide) {
         data.currentRide.finishedRide = false;
         data.currentRide.chargerDisconnected = false;
         data.currentRide.bluetoothDisconnected = false;
         data.currentRide.chargedDuringTheRide = false;
         data.currentRide.usedBluetoothDuringTheRide = false;
-    }
-    // the ride state stay the same
-    else {
-        data.currentRide.finishedRide = false;
-    }
-
-    console.log('data = ', data)    // ------------------------------------------------------------------------
-
-    // the user is on ride and also charging the phone
-    if (data.isOnRide && (data.batteryState === 'charging' || data.batteryState === 'full')) {
-        data.currentRide.chargedDuringTheRide = true;
-    }
-
-    // the user is on ride and also using bluetooth
-    if (data.isOnRide && data.bluetoothConnected) {
-        data.currentRide.usedBluetoothDuringTheRide = true;
     }
 
 };
@@ -168,8 +159,8 @@ const updateBatteryState = async (data) => {
     });
 };
 
-// updates the location, speed and whether the user is on ride or not
-const updateMovementInfo = async (data, info) => {
+// updates all the fields of the data and stores it in the async storage
+const updateData = async (data, info, previousData) => {
     data.currentLocation = {
         latitude: info.coords.latitude,
         longitude: info.coords.longitude,
@@ -177,15 +168,25 @@ const updateMovementInfo = async (data, info) => {
         longitudeDelta: 0.005
     };
     data.currentSpeed = info.coords.speed;
-    data.isOnRide = info.coords.speed >= 7;
+    data.isOnRide = info.coords.speed >= 5;
+
+    await updateBatteryState(data);
+    await updateBluetoothState(data);
+    await updateCurrentRideParams(data, previousData);
+
+    await updateAppState(data);
+
+    await writeDataToStorage('data', data, true);
+    // console.log('data written to storage');
 };
 
-// updates the data in the async storage and returns the updated data
-const updateDataInStorage = async (data, previousData, bleManager) => {
+// updates the data in the async storage
+const updateDataInStorage = async (data) => {
+    const previousData = Object.assign({}, data);
 
     await Geolocation.getCurrentPosition(
         async (info) => {
-            await updateMovementInfo(data, info);
+            await updateData(data, info, previousData);
         },
         (error) => {
             console.log(error);
@@ -194,13 +195,6 @@ const updateDataInStorage = async (data, previousData, bleManager) => {
             enableHighAccuracy: true
         }
     );
-    await updateBatteryState(data);
-    await updateBluetoothState(data);
-    await updateCurrentRideParams(data, previousData);
-
-    await updateAppState(data);
-
-    await writeDataToStorage('data', data, true);
 
 };
 

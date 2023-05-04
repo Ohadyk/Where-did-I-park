@@ -40,9 +40,7 @@ const IParkedButton = () => {
                 usedBluetoothDuringTheRide: currentRide.usedBluetoothDuringTheRide,
             };
             rides.push(ride);
-
-            console.log('----- currentRide = ', currentRide);   // ---------------------------------------------------
-
+            
             const userData = {
                 learnedRides: firestore.FieldValue.arrayUnion(ride),
                 numOfLearnedRides: firestore.FieldValue.increment(1),

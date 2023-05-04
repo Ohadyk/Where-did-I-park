@@ -1,7 +1,7 @@
 import PushNotification from "react-native-push-notification";
 
 // This method send the user a local push notification that ask him if he parked the car
-const askParkingNotification = async (currentLocation) => {
+const askParkingNotification = async (data) => {
 
     PushNotification.localNotification({
         channelId: 'parking-channel-id',
@@ -20,8 +20,8 @@ const askParkingNotification = async (currentLocation) => {
 
         userInfo: {
             currentLocation: {
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude
+                latitude: data.currentLocation.latitude,
+                longitude: data.currentLocation.longitude
             }
         }
 
