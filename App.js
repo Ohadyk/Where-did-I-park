@@ -52,7 +52,8 @@ const App = () => {
             chargerDisconnected: false,
             bluetoothDisconnected: false,
             chargedDuringTheRide: false,
-            usedBluetoothDuringTheRide: false
+            usedBluetoothDuringTheRide: false,
+            parkingChecked: false
         }
     }
 

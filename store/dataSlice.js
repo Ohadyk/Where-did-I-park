@@ -23,8 +23,9 @@ const dataSlice = createSlice({
             chargerDisconnected: false,
             bluetoothDisconnected: false,
             chargedDuringTheRide: false,
-            usedBluetoothDuringTheRide: false
-        },
+            usedBluetoothDuringTheRide: false,
+            parkingChecked: false
+        }
     },
 
     reducers: {
@@ -90,7 +91,12 @@ const dataSlice = createSlice({
 
         setIsUsedBluetoothDuringTheRide(state, action) {
             state.currentRide.usedBluetoothDuringTheRide = action.payload
+        },
+
+        setParkingChecked(state, action) {
+            state.currentRide.parkingChecked = action.payload
         }
+
     }
 });
 

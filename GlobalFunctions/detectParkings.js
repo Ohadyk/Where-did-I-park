@@ -3,8 +3,6 @@ import askParkingNotification from "./askParkingNotification";
 // Trying to detect the user's parking moment. If so saves the location
 const detectParking = async (currentData) => {
 
-    // console.log('finishedRide = ', currentData.currentRide.finishedRide);
-
     // the user may have finished the ride
     if (currentData.currentRide.finishedRide) {
 

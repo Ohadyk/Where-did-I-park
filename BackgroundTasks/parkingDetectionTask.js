@@ -15,7 +15,6 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
     await new Promise( async (resolve) => {
 
-        // let previousData = taskDataArguments.initialData;
         let updatedData = {
             isOnRide: false,
             currentRide: {
@@ -23,12 +22,14 @@ export const parkingDetectionTask = async (taskDataArguments) => {
                 chargerDisconnected: false,
                 bluetoothDisconnected: false,
                 chargedDuringTheRide: false,
-                usedBluetoothDuringTheRide: false
+                usedBluetoothDuringTheRide: false,
+                parkingChecked: false
             },
             probablyParkingLocations: []
         };
 
         for (let i = 0; BackgroundService.isRunning(); i++) {
+
             await updateDataInStorage(updatedData);
 
             // console.log('i = ', i);
@@ -37,8 +38,13 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
             // try to detect the parking moment
             if (updatedData.appState === 'stable') {
+                let userParked = false;
 
-                const userParked = await detectParking(updatedData);
+                // current ride not checked yet - check for parking
+                if (!updatedData.currentRide.parkingChecked) {
+                    userParked = await detectParking(updatedData);
+                    updatedData.currentRide.parkingChecked = true;
+                }
 
                 // saves the parking location in storage
                 if (userParked) {

@@ -9,6 +9,7 @@ const StableStateCard = () => {
     const batteryState = useSelector(state => state.data.batteryState);
     const bluetoothConnected = useSelector(state => state.data.bluetoothConnected);
     const currentRide = useSelector(state => state.data.currentRide);
+    const probablyParkingLocations = useSelector(state => state.internalUsageData.probablyParkingLocations);
 
     return(
         <Animated.View
@@ -17,13 +18,14 @@ const StableStateCard = () => {
             exiting={SlideOutUp.duration(500).delay(0)}
         >
             {/*<Text style={styles.bodyTxt}>השאר/י את האפליקציה פתוחה על מנת שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקום הרכב</Text>*/}
-            <Text style={styles.bodyTxt}>batteryState = {batteryState.toString()}</Text>
-            <Text style={styles.bodyTxt}>bluetoothConnected = {bluetoothConnected.toString()}</Text>
-            <Text style={styles.bodyTxt}>finishedRide = {currentRide.finishedRide.toString()}</Text>
-            <Text style={styles.bodyTxt}>chargedDuringTheRide = {currentRide.chargedDuringTheRide.toString()}</Text>
-            <Text style={styles.bodyTxt}>usedBluetoothDuringTheRide = {currentRide.usedBluetoothDuringTheRide.toString()}</Text>
-            <Text style={styles.bodyTxt}>chargerDisconnected = {currentRide.chargerDisconnected.toString()}</Text>
-            <Text style={styles.bodyTxt}>bluetoothDisconnected = {currentRide.bluetoothDisconnected.toString()}</Text>
+            <Text style={styles.bodyTxt}>probablyParkingLocations len = {probablyParkingLocations.length}</Text>
+            {/*<Text style={styles.bodyTxt}>batteryState = {batteryState.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>bluetoothConnected = {bluetoothConnected.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>finishedRide = {currentRide.finishedRide.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>chargedDuringTheRide = {currentRide.chargedDuringTheRide.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>usedBluetoothDuringTheRide = {currentRide.usedBluetoothDuringTheRide.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>chargerDisconnected = {currentRide.chargerDisconnected.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>bluetoothDisconnected = {currentRide.bluetoothDisconnected.toString()}</Text>*/}
         </Animated.View>
     )
 };

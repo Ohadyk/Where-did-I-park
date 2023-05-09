@@ -75,6 +75,7 @@ const updateCurrentRideParams = async (data, previousData) => {
     // user speed has dropped drastically
     if (previousData.isOnRide && !data.isOnRide) {
         data.currentRide.finishedRide = true;
+        data.currentRide.parkingChecked = false;
     }
 
     if (data.isOnRide) {
@@ -106,6 +107,16 @@ const updateCurrentRideParams = async (data, previousData) => {
         data.currentRide.bluetoothDisconnected = false;
         data.currentRide.chargedDuringTheRide = false;
         data.currentRide.usedBluetoothDuringTheRide = false;
+        data.currentRide.parkingChecked = true;
+    }
+
+    // the user stay in same state - on ride
+    if (previousData.isOnRide && data.isOnRide) {
+        data.currentRide.parkingChecked = true;
+    }
+    // the user stay in same state - not on ride
+    if (!previousData.isOnRide && !data.isOnRide) {
+        data.currentRide.parkingChecked = true;
     }
 
 };
@@ -168,7 +179,7 @@ const updateData = async (data, info, previousData) => {
         longitudeDelta: 0.005
     };
     data.currentSpeed = info.coords.speed;
-    data.isOnRide = info.coords.speed >= 5;
+    data.isOnRide = info.coords.speed >= 6;
 
     await updateBatteryState(data);
     await updateBluetoothState(data);
