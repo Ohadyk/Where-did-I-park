@@ -132,24 +132,36 @@ const App = () => {
                 }
                 setIsLoggedIn(true);
 
-                const locationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-                if (locationPermissions === 'denied') {
+                const fineLocationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+                if (fineLocationPermissions === 'denied') {
                     console.log('location permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד");
+                    Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד כראוי");
+                    SplashScreen.hide();
                     return;
+                }
+                else {
+                    const alwaysLocationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION);
+                    if (alwaysLocationPermissions === 'denied') {
+                        console.log('location permissions denied');
+                        Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר ברקע כדי שהאפליקציה תוכל לעבוד כראוי");
+                        SplashScreen.hide();
+                        return;
+                    }
                 }
 
                 const bleScanPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);
                 if (bleScanPermissions === 'denied') {
                     console.log('bluetooth permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד");
+                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד כראוי");
+                    SplashScreen.hide();
                     return;
                 }
 
                 const bleConnectPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
                 if (bleConnectPermissions === 'denied') {
                     console.log('bluetooth permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד");
+                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד כראוי");
+                    SplashScreen.hide();
                     return;
                 }
 

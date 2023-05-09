@@ -6,7 +6,7 @@ const addProbablyParkingLocation = async (parkingLocations, parkingData) => {
 
     parkingLocations.push(parkingData);
 
-    if (parkingLocations.length > 10) {
+    if (parkingLocations.length > 8) {
         parkingLocations.shift();
     }
 
