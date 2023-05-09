@@ -40,7 +40,7 @@ const IParkedButton = () => {
                 usedBluetoothDuringTheRide: currentRide.usedBluetoothDuringTheRide,
             };
             rides.push(ride);
-            
+
             const userData = {
                 learnedRides: firestore.FieldValue.arrayUnion(ride),
                 numOfLearnedRides: firestore.FieldValue.increment(1),
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         bottom: 30,
         padding: 5,
         borderRadius: 100,
-        borderWidth: 0,
+        borderWidth: 1,
     },
 
     parkedGradient: {
