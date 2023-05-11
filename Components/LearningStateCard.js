@@ -20,9 +20,10 @@ const LearningStateCard = () => {
             {/* CHANGE */}
             {/*<Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שבעתיד האפליקציה תזהה חניות באופן אוטומטי ותשמור עבורך את מיקום הרכב</Text>*/}
             <Text style={styles.bodyTxt}>probablyParkingLocations len = {probablyParkingLocations.length}</Text>
+            {/*<Text style={styles.bodyTxt}>finishedRide = {currentRide.finishedRide.toString()}</Text>*/}
+            {/*<Text style={styles.bodyTxt}>parkingChecked = {currentRide.parkingChecked.toString()}</Text>*/}
             {/*<Text style={styles.bodyTxt}>batteryState = {batteryState.toString()}</Text>*/}
             {/*<Text style={styles.bodyTxt}>bluetoothConnected = {bluetoothConnected.toString()}</Text>*/}
-            {/*<Text style={styles.bodyTxt}>finishedRide = {currentRide.finishedRide.toString()}</Text>*/}
             {/*<Text style={styles.bodyTxt}>chargedDuringTheRide = {currentRide.chargedDuringTheRide.toString()}</Text>*/}
             {/*<Text style={styles.bodyTxt}>usedBluetoothDuringTheRide = {currentRide.usedBluetoothDuringTheRide.toString()}</Text>*/}
             {/*<Text style={styles.bodyTxt}>chargerDisconnected = {currentRide.chargerDisconnected.toString()}</Text>*/}

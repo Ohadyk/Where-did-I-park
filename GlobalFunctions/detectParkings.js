@@ -1,6 +1,9 @@
 import askParkingNotification from "./askParkingNotification";
 
-// Trying to detect the user's parking moment. If so saves the location
+// Trying to detect the user's parking moment. If so saves the location and return the result.
+// Result:  0 - false
+//          1 - true
+//         -1 - unknown
 const detectParking = async (currentData) => {
 
     // the user may have finished the ride
@@ -12,8 +15,11 @@ const detectParking = async (currentData) => {
             // the user disconnected the charger
             if (currentData.currentRide.chargerDisconnected) {
                 console.log('charger disconnected');
-                await askParkingNotification(currentData.currentLocation);
-                return true;
+                await askParkingNotification(currentData);
+                return 1;
+            }
+            else {
+                return -1;
             }
         }
         // the user tends to use bluetooth during rides
@@ -22,15 +28,18 @@ const detectParking = async (currentData) => {
             // the user disconnected the bluetooth
             if (currentData.currentRide.bluetoothDisconnected) {
                 console.log('bluetooth disconnected');
-                await askParkingNotification(currentData.currentLocation);
-                return true;
+                await askParkingNotification(currentData);
+                return 1;
+            }
+            else {
+                return -1;
             }
         }
 
-        return true;
+        return 1;
     }
 
-    return false;
+    return 0;
 };
 
 export default detectParking;

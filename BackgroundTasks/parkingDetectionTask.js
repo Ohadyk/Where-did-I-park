@@ -32,22 +32,21 @@ export const parkingDetectionTask = async (taskDataArguments) => {
 
             await updateDataInStorage(updatedData);
 
-            // console.log('i = ', i);
-            // const storageData = await readDataFromStorage('data');
-            // console.log('storageData.isOnRide = ', storageData.isOnRide);
-
             // try to detect the parking moment
             if (updatedData.appState === 'stable') {
-                let userParked = false;
+                let userParked = 0;
 
                 // current ride not checked yet - check for parking
                 if (!updatedData.currentRide.parkingChecked) {
                     userParked = await detectParking(updatedData);
-                    updatedData.currentRide.parkingChecked = true;
+
+                    if (userParked !== -1) {
+                        updatedData.currentRide.parkingChecked = true;
+                    }
                 }
 
                 // saves the parking location in storage
-                if (userParked) {
+                if (userParked === 1) {
                     const parkingData = {
                         date: Date.now(),
                         parkedVehicleLocation: {
