@@ -2,11 +2,6 @@ import BackgroundService from "react-native-background-actions";
 import updateDataInStorage from "../GlobalFunctions/updateDataInStorage";
 import detectParking from "../GlobalFunctions/detectParkings";
 import addProbablyParkingLocation from "../GlobalFunctions/addProbablyParkingLocation";
-import askParkingNotification from "../GlobalFunctions/askParkingNotification";
-import updateDataInFirestore from "../GlobalFunctions/updateDataInFirestore";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
-import readDataFromStorage from "../GlobalFunctions/readDataFromStorage";
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 

@@ -7,16 +7,19 @@ const askParkingNotification = async (data) => {
         channelId: 'parking-channel-id',
         foreground: true,
         largeIcon: 'ic_launcher',
+        playSound: true,
+        soundName: 'notification.mp3',
         vibrate: true,
         vibration: 300,
         priority: 'high',
         importance: 'high',
+        visibility: 'public',
 
         title: 'האפליקציה זיהתה חניה',
         message: 'האם אכן חנית?',
 
         actions: ['חניתי', 'לא חניתי'],
-        invokeApp: false,
+        invokeApp:true,
 
         userInfo: {
             currentLocation: {

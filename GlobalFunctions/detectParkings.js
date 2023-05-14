@@ -1,4 +1,5 @@
 import askParkingNotification from "./askParkingNotification";
+import PushNotification from "react-native-push-notification";
 
 // Trying to detect the user's parking moment. If so saves the location and return the result.
 // Result:  0 - false
@@ -17,7 +18,7 @@ const detectParking = async (currentData) => {
 
                 // the user disconnected the charger
                 if (currentData.currentRide.chargerDisconnected) {
-                    console.log('charger disconnected');
+                    PushNotification.cancelAllLocalNotifications();
                     await askParkingNotification(currentData);
                     return 1;
                 }
@@ -38,7 +39,7 @@ const detectParking = async (currentData) => {
 
                 // the user disconnected the bluetooth
                 if (currentData.currentRide.bluetoothDisconnected) {
-                    console.log('bluetooth disconnected');
+                    PushNotification.cancelAllLocalNotifications();
                     await askParkingNotification(currentData);
                     return 1;
                 }

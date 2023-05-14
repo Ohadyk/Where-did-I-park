@@ -17,6 +17,7 @@ const LearningStateCard = () => {
             entering={SlideInUp.duration(700).delay(1000)}
             exiting={SlideOutUp.duration(500).delay(0)}
         >
+
             {/* CHANGE */}
             {/*<Text style={styles.bodyTxt}>עדכן/י באמצעות הכפתור כאשר הנך מחנה, כדי שבעתיד האפליקציה תזהה חניות באופן אוטומטי ותשמור עבורך את מיקום הרכב</Text>*/}
             <Text style={styles.bodyTxt}>probablyParkingLocations len = {probablyParkingLocations.length}</Text>

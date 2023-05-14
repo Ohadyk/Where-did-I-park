@@ -17,6 +17,7 @@ const StableStateCard = () => {
             entering={SlideInUp.duration(700).delay(500)}
             exiting={SlideOutUp.duration(500).delay(0)}
         >
+
             {/* CHANGE */}
             {/*<Text style={styles.bodyTxt}>השאר/י את האפליקציה פתוחה על מנת שנזהה חניות באופן אוטומטי ונשמור עבורך את מיקום הרכב</Text>*/}
             {/*<Text style={styles.bodyTxt}>probablyParkingLocations len = {probablyParkingLocations.length}</Text>*/}

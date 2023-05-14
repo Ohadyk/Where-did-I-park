@@ -32,7 +32,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     const initialPersistData = {
-        appState: 'learning',
+        appState: 'stable',
         userConnectingToCharger: false,
         userConnectingToBluetooth: false,
         numOfLearnedRides: 0,

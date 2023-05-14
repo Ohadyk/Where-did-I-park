@@ -18,6 +18,9 @@ PushNotification.createChannel(
         channelId: "parking-channel-id",
         channelName: "Parking channel",
         importance: Importance.HIGH,
+        playSound: true,
+        soundName: 'notification.mp3',
+        vibrate: true,
     },
     (created) => console.log(`createChannel returned '${created}'`)
 );
