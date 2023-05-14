@@ -90,13 +90,11 @@ const updateCurrentRideParams = async (data, previousData) => {
     }
 
     // user charged during the ride and unplugged the charger
-    if (data.currentRide.finishedRide &&
-            data.currentRide.chargedDuringTheRide && data.batteryState === 'unplugged') {
+    if (data.currentRide.chargedDuringTheRide && data.batteryState === 'unplugged') {
         data.currentRide.chargerDisconnected = true;
     }
     // user used bluetooth during the ride and disconnected it
-    if (data.currentRide.finishedRide &&
-            data.currentRide.usedBluetoothDuringTheRide && !data.bluetoothConnected) {
+    if (data.currentRide.usedBluetoothDuringTheRide && !data.bluetoothConnected) {
         data.currentRide.bluetoothDisconnected = true;
     }
 
@@ -109,16 +107,6 @@ const updateCurrentRideParams = async (data, previousData) => {
         data.currentRide.usedBluetoothDuringTheRide = false;
         data.currentRide.parkingChecked = true;
     }
-
-    // the user stay in same state - on ride
-    if (previousData.isOnRide && data.isOnRide) {
-        data.currentRide.parkingChecked = true;
-    }
-    // the user stay in same state - not on ride
-    if (!previousData.isOnRide && !data.isOnRide) {
-        data.currentRide.parkingChecked = true;
-    }
-
 };
 
 // updates the bluetooth state

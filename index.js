@@ -19,7 +19,7 @@ PushNotification.createChannel(
         channelName: "Parking channel",
         importance: Importance.HIGH,
     },
-    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    (created) => console.log(`createChannel returned '${created}'`)
 );
 
 PushNotification.configure({
