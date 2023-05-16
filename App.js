@@ -19,7 +19,6 @@ import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
 import { internalUsageDataActions } from "./store/internalUsageDataSlice";
-import backgroundServer from "react-native-background-actions";
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +57,7 @@ const App = () => {
     }
 
     const internalUsageData = {
-        wantedAppState: 'learning',
+        wantedAppState: 'stable',
         parkedVehicleLocation: null,
         probablyParkingLocations: [],
         wrongDetectedParking: 0
@@ -95,7 +94,7 @@ const App = () => {
             if (user) {
                 const userData = await getFirestoreUserData();
 
-                // init user data in storage
+                // init user data got from firestore to storage
                 if (userData !== null) {
 
                     initialPersistData.userConnectingToCharger = userData.userConnectingToCharger;

@@ -17,10 +17,7 @@ PushNotification.createChannel(
     {
         channelId: "parking-channel-id",
         channelName: "Parking channel",
-        importance: Importance.HIGH,
-        playSound: true,
-        soundName: 'notification.mp3',
-        vibrate: true,
+        importance: Importance.HIGH
     },
     (created) => console.log(`createChannel returned '${created}'`)
 );
@@ -39,7 +36,6 @@ PushNotification.configure({
 
     // (optional) Called when the user interact with the notification by the notification actions
     onAction: async function (action) {
-
         const userInfoObject = JSON.parse(action.userInfo);
         const userLocation = userInfoObject.currentLocation;
 
@@ -48,6 +44,7 @@ PushNotification.configure({
             const userData = {
                 parkedVehicleLocation: userLocation
             };
+
             const parkedLocation = {
                 probablyParkingLocations: [],
                 parkedVehicleLocation: userLocation
