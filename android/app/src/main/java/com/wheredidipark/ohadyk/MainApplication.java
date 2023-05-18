@@ -1,4 +1,4 @@
-package com.wheredidipark;
+package com.wheredidipark.ohadyk;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
