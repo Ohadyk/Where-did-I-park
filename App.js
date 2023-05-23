@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { Alert, PermissionsAndroid, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,8 +14,6 @@ import { useDispatch } from "react-redux";
 import { dataActions } from "./store/dataSlice";
 import setDataDocInFirestore from "./GlobalFunctions/setDataDocInFirestore";
 import BackgroundService from "react-native-background-actions";
-import { parkingDetectionTask } from "./BackgroundTasks/parkingDetectionTask";
-import { taskOptions } from "./BackgroundTasks/TasksConfig";
 import readDataFromStorage from "./GlobalFunctions/readDataFromStorage";
 import writeMultiToStorage from "./GlobalFunctions/writeMultiToStorage";
 import { internalUsageDataActions } from "./store/internalUsageDataSlice";
@@ -69,6 +67,8 @@ const App = () => {
         const internalData = await readDataFromStorage('internalUsageData');
 
         if(persistData !== null) {
+            console.log('interval currentLocation = ', persistData.currentLocation);
+
             dispatch(dataActions.setAppState(persistData.appState));
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
             dispatch(dataActions.setNumOfLearnedRides(persistData.numOfLearnedRides));
@@ -131,45 +131,6 @@ const App = () => {
                 }
                 setIsLoggedIn(true);
 
-                const fineLocationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-                if (fineLocationPermissions === 'denied') {
-                    console.log('location permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד כראוי");
-                    SplashScreen.hide();
-                    return;
-                }
-                else {
-                    const alwaysLocationPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION);
-                    if (alwaysLocationPermissions === 'denied') {
-                        console.log('location permissions denied');
-                        Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר ברקע כדי שהאפליקציה תוכל לעבוד כראוי");
-                        SplashScreen.hide();
-                        return;
-                    }
-                }
-
-                const bleScanPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);
-                if (bleScanPermissions === 'denied') {
-                    console.log('bluetooth permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד כראוי");
-                    SplashScreen.hide();
-                    return;
-                }
-
-                const bleConnectPermissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
-                if (bleConnectPermissions === 'denied') {
-                    console.log('bluetooth permissions denied');
-                    Alert.alert("שגיאה", "אפשר/י גישה לבלוטות' כדי שהאפליקציה תוכל לעבוד כראוי");
-                    SplashScreen.hide();
-                    return;
-                }
-
-                if (!BackgroundService.isRunning()) {
-                    BackgroundService.stop().then(r => {});
-                    BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-                    console.log('task start');
-                }
-
                 if(!updateReduxIntervalRef.current) {
                     updateReduxIntervalRef.current = setInterval(updateDataInRedux, 5000);
                     console.log('interval start');
@@ -184,6 +145,7 @@ const App = () => {
                 updateReduxIntervalRef.current = null;
                 console.log('interval stop');
             }
+
             SplashScreen.hide();
         });
 

@@ -169,6 +169,8 @@ const updateData = async (data, info, previousData) => {
     data.currentSpeed = info.coords.speed;
     data.isOnRide = info.coords.speed >= 6;
 
+    console.log('task currentLocation = ', data.currentLocation);
+
     await updateBatteryState(data);
     await updateBluetoothState(data);
     await updateCurrentRideParams(data, previousData);

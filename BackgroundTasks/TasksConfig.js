@@ -1,7 +1,7 @@
 export const taskOptions = {
     taskName: 'parkingDetection',
-    taskTitle: 'Parking Detection',
-    taskDesc: 'Detects when you park',
+    taskTitle: 'זיהוי חניה פעיל',
+    taskDesc: 'נשמור עבורך את מיקום הרכב',
     taskIcon: {
         name: 'ic_launcher',
         type: 'mipmap',

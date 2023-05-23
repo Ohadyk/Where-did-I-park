@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
-import Geolocation from "react-native-geolocation-service";
 import LocationButton from "../Buttons/LocationButton";
 import { useSelector } from "react-redux";
 import { View } from "react-native";
@@ -15,43 +14,18 @@ const region = {
 
 const HomeMap = () => {
 
-    const appState = useSelector(state => state.data.appState);
+    const currentLocation = useSelector(state => state.data.currentLocation);
     const probablyParkingLocations = useSelector(state => state.internalUsageData.probablyParkingLocations);
     const parkedVehicleLocation = useSelector(state => state.internalUsageData.parkedVehicleLocation);
 
     const mapRef = useRef(null);
 
-    const setWatchPosition = () => {
-        return Geolocation.watchPosition(
-            (position) => {
-                const location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    latitudeDelta: 0.005,
-                    longitudeDelta: 0.005
-                }
-                if (mapRef.current) {
-                    mapRef.current.animateToRegion(location, 1000);
-                }
-            },
-            (error) => {
-                console.log(error);
-            },
-            {
-                enableHighAccuracy: true,
-                distanceFilter: 0,
-                interval: 5000
-            }
-        );
-    };
-
     useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.animateToRegion(currentLocation, 1000);
+        }
 
-        const watchId = setWatchPosition();
-
-        return () => { Geolocation.clearWatch(watchId) }
-
-    }, []);
+    }, [currentLocation]);
 
     return (
         <View style={{flex: 1}}>
