@@ -67,8 +67,6 @@ const App = () => {
         const internalData = await readDataFromStorage('internalUsageData');
 
         if(persistData !== null) {
-            console.log('interval currentLocation = ', persistData.currentLocation);
-
             dispatch(dataActions.setAppState(persistData.appState));
             dispatch(dataActions.setCurrentLocation(persistData.currentLocation));
             dispatch(dataActions.setNumOfLearnedRides(persistData.numOfLearnedRides));

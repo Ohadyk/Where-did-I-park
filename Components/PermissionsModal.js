@@ -53,7 +53,7 @@ const PermissionsModal = () => {
                     style={{ width: '100%', height: '100%', alignSelf: 'center' }}
                 />
             </View>
-            <Text style={styles.bodyTxt}>אפליקציה זו עוקבת אחר מיקומך, גם כאשר האפליקציה סגורה או לא בשימוש, כדי לזהות חניות ולשמור את מיקומם.</Text>
+            <Text style={styles.bodyTxt}>אפליקציה זו אוספת נתוני מיקום כדי לאפשר את זיהוי החניות, גם כאשר האפליקציה סגורה או לא בשימוש.</Text>
             <View style={styles.buttonsContainer}>
                 <PrimaryButton
                     text={'אפשר'}
