@@ -37,8 +37,8 @@ const App = () => {
         currentLocation: {
             latitude: 31.768319,
             longitude: 35.21371,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
         },
         currentSpeed: 0,
         isOnRide: false,
