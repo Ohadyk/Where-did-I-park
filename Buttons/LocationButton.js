@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import GlobalStyle from "../StyleSheet/GlobalStyle";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Geolocation from "react-native-geolocation-service";
@@ -20,6 +20,12 @@ const LocationButton = (props) => {
             },
             (error) => {
                 console.log(error);
+                if (error.message === "Location permission not granted.") {
+                    Alert.alert("שגיאה", "אפשר/י גישה למיקום המכשיר כדי שהאפליקציה תוכל לעבוד כראוי");
+                }
+                else {
+                    Alert.alert("שגיאה", "משהו השתבש");
+                }
             },
             {
                 enableHighAccuracy: true

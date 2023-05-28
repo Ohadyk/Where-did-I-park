@@ -25,9 +25,12 @@ const PermissionsModal = () => {
         // start the background task to follow user location
         if (allowed) {
             if (!BackgroundService.isRunning()) {
-                BackgroundService.stop().then(r => {});
-                BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-                console.log('task start from modal');
+                BackgroundService.stop().then(r => {
+                    BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                    console.log('task start from modal');
+                });
+                // BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                // console.log('task start from modal');
             }
         }
         dispatch(uiActions.setShowPermissionsModal(false));

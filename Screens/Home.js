@@ -35,9 +35,12 @@ const Home = () => {
             }
             else {
                 if (!BackgroundService.isRunning()) {
-                    BackgroundService.stop().then(r => {});
-                    BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
-                    console.log('task start from home');
+                    BackgroundService.stop().then(r => {
+                        BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                        console.log('task start from home');
+                    });
+                    // BackgroundService.start(parkingDetectionTask, taskOptions).then(r => {});
+                    // console.log('task start from home');
                 }
             }
         }

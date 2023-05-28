@@ -72,7 +72,7 @@ const updateAppState = async (data) => {
 // updates the battery and bluetooth params indicating if the user used them on ride
 const updateCurrentRideParams = async (data, previousData) => {
 
-    // user speed has dropped drastically
+    // user speed has dropped drastically - need to check for parking
     if (previousData.isOnRide && !data.isOnRide) {
         data.currentRide.finishedRide = true;
         data.currentRide.parkingChecked = false;
@@ -176,7 +176,6 @@ const updateData = async (data, info, previousData) => {
     await updateAppState(data);
 
     await writeDataToStorage('data', data, true);
-    // console.log('data written to storage');
 };
 
 // updates the data in the async storage
